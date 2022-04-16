@@ -157,6 +157,20 @@ module.exports = {
         reportFilename: `_bundle.html`,
         openAnalyzer: false,
       },
+      
     },
+    {
+      resolve: `gatsby-plugin-google-gtag`,
+      options: {
+        // You can add multiple tracking ids and a pageview event will be fired for all of them.
+        trackingIds: [
+          "GA-TRACKING_ID", // Google Analytics / GAs
+        ],
+        gtagConfig: {
+          optimize_id: "G-1RB65T4SPV",
+          anonymize_ip: true,
+          cookie_expires: 0,
+        },
+    }
   ].filter(Boolean),
 }
