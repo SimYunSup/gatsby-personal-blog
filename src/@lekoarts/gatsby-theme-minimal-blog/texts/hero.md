@@ -1,10 +1,5 @@
----
-title: About
-slug: "/about"
----
-
-<Text sx={{ fontSize: [4, 5, 6], fontWeight: `bold`, color: `heading` }}>
+<h3>
   안녕하세요.
-</Text>
+</h3>
 
 저는 심윤섭입니다. 서울에 살고 있는 개발자입니다. 프론트엔드와 관련된 정보를 찾아 인터넷을 돌아다닙니다.
