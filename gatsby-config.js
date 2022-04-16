@@ -7,14 +7,13 @@ module.exports = {
     // You can overwrite values here that are used for the SEO component
     // You can also add new values here to query them like usual
     // See all options: https://github.com/LekoArts/gatsby-themes/blob/main/themes/gatsby-theme-minimal-blog/gatsby-config.js
-    siteTitle: `Minimal Blog`,
-    siteTitleAlt: `Minimal Blog - Gatsby Theme`,
-    siteHeadline: `Minimal Blog - Gatsby Theme from @lekoarts`,
-    siteUrl: `https://minimal-blog.lekoarts.de`,
-    siteDescription: `Typography driven, feature-rich blogging theme with minimal aesthetics. Includes tags/categories support and extensive features for code blocks such as live preview, line numbers, and line highlighting.`,
-    siteLanguage: `en`,
-    siteImage: `/banner.jpg`,
-    author: `@lekoarts_de`,
+    siteTitle: `Ethan Sup\'s log`,
+    siteTitleAlt: `Ethan Sup\'s log`,
+    siteHeadline: `Ethan Sup\'s log`,
+    siteUrl: `https://ethapsup.net`,
+    siteDescription: `기록을 위한 블로그`,
+    siteLanguage: `ko`,
+    author: `@SimYunSup`,
   },
   plugins: [
     {
@@ -33,12 +32,8 @@ module.exports = {
         ],
         externalLinks: [
           {
-            name: `Twitter`,
-            url: `https://twitter.com/lekoarts_de`,
-          },
-          {
-            name: `Homepage`,
-            url: `https://www.lekoarts.de?utm_source=minimal-blog&utm_medium=Starter`,
+            name: `Github`,
+            url: `https://github.com/SimYunSup`,
           },
         ],
       },
@@ -62,9 +57,9 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `minimal-blog - @lekoarts/gatsby-theme-minimal-blog`,
-        short_name: `minimal-blog`,
-        description: `Typography driven, feature-rich blogging theme with minimal aesthetics. Includes tags/categories support and extensive features for code blocks such as live preview, line numbers, and code highlighting.`,
+        name: `Ethan Sup\'s log`,
+        short_name: `Ethan Sup\'s log`,
+        description: `기록을 위한 블로그`,
         start_url: `/`,
         background_color: `#fff`,
         // This will impact how browsers show your PWA/website
@@ -73,15 +68,35 @@ module.exports = {
         display: `standalone`,
         icons: [
           {
-            src: `/android-chrome-192x192.png`,
-            sizes: `192x192`,
-            type: `image/png`,
-          },
-          {
-            src: `/android-chrome-512x512.png`,
-            sizes: `512x512`,
-            type: `image/png`,
-          },
+            "src": "\/android-icon-36x36.png",
+            "sizes": "36x36",
+            "type": "image\/png",
+           },
+           {
+            "src": "\/android-icon-48x48.png",
+            "sizes": "48x48",
+            "type": "image\/png",
+           },
+           {
+            "src": "\/android-icon-72x72.png",
+            "sizes": "72x72",
+            "type": "image\/png",
+           },
+           {
+            "src": "\/android-icon-96x96.png",
+            "sizes": "96x96",
+            "type": "image\/png",
+           },
+           {
+            "src": "\/android-icon-144x144.png",
+            "sizes": "144x144",
+            "type": "image\/png",
+           },
+           {
+            "src": "\/android-icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image\/png",
+           }
         ],
       },
     },
@@ -110,10 +125,10 @@ module.exports = {
                 return {
                   title: post.title,
                   date: post.date,
-                  excerpt: post.excerpt,
+                  excerpt: post.description,
                   url,
                   guid: url,
-                  custom_elements: [{ "content:encoded": content }],
+                  custom_elements: [{ "content:encoded": post.description }],
                 }
               }),
             query: `
@@ -122,14 +137,14 @@ module.exports = {
                   nodes {
                     title
                     date(formatString: "MMMM D, YYYY")
-                    excerpt
+                    description
                     slug
                   }
                 }
               }
             `,
             output: `rss.xml`,
-            title: `Minimal Blog - @lekoarts/gatsby-theme-minimal-blog`,
+            title: `Ethan sup\'s log`,
           },
         ],
       },
