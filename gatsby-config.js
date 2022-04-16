@@ -20,6 +20,7 @@ module.exports = {
       resolve: `@lekoarts/gatsby-theme-minimal-blog`,
       // See the theme's README for all available options
       options: {
+        sharp: false,
         navigation: [
           {
             title: `Blog`,
@@ -172,6 +173,15 @@ module.exports = {
           cookie_expires: 0,
         },
       }
-    }
+    },
+    {
+      resolve: `gatsby-plugin-sharp`,
+      options: {
+        defaults: {
+          formats: [`webp`, `auto`],
+          quality: 90,
+        },
+      },
+    },
   ].filter(Boolean),
 }
