@@ -179,5 +179,28 @@ module.exports = {
         },
       },
     },
+    {
+      resolve: `gatsby-plugin-sitemap`,
+      query: `
+        {
+          allPost(sort: { fields: date, order: DESC }) {
+            nodes {
+              title
+              date(formatString: "MMMM D, YYYY")
+              description
+              slug
+            }
+          }
+        }
+      `,
+      serialize: ({ query: { site, allPost } }) =>
+        allPost.nodes.map((post) => {
+          const url = site.siteMetadata.siteUrl + post.slug
+          return {
+            lastmod: post.date,
+            url,
+          }
+        }),
+    }
   ].filter(Boolean),
 }
