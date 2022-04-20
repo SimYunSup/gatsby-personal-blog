@@ -36,11 +36,13 @@ _snap-scroll은 중요한 브라우저에는 모두 구현되어있다(IE 빼고
 한 줄로 요약하자면..
 
 ![후.. 너네는 이런거 쓰지마라...](../images/snap-scroll-instead-fullpage-3.png)
+
 _사람들이 안 쓰는데 이유가 있다_
 
 CSS의 `snap-scroll`은 Firefox에서는 정상적으로 돌아갔다. 약간만 내려도 다음 `div`로 고정이 되면서 스크롤이 넘어갔다. 애니메이션도 적절하고 프레임도 매끄럽게 흘러갔다(끊기지 않는다는 뜻). 정말 완벽했다.
 
 ![후.. 너네는 이런거 쓰지마라...](../images/snap-scroll-instead-fullpage-4.gif)
+
 _크롬의 통수(왼쪽: Firefox 78, 오른쪽: Chrome 84)_
 
 하지만 Chrome을 간과하고 있었다. 개발을 끝마치던 중, Chrome을 키고 테스트를 하자 Firefox의 애니메이션과는 다르게 내가 스크롤 하는게 끝나고 그 다음 애니메이션이 시작하기 전까지의 지연되는 시간이 인지할 만큼 긴 것을 확인할 수 있었다.. 개발은 모두 끝났는데...
@@ -66,6 +68,7 @@ snap-scroll-type: none | [ x | y | block | inline | both ] [ mandatory | proximi
 `snap-scroll-type`은 컨테이너에서 Scroll snap을 할 축과 엄격도를 정한다.  첫번째에 넣는 값으로는 x, y축 혹은 block축, inline축 등으로 정할 수 있다. 두번째로는 `mandatory`를 넣어 항상 snap point에 놓이도록 무조건 Scroll snap이 되도록 할 수 있고 `proximity`를 넣어 사용자의 스크롤을 우선시할 수 있다.
 
 ![mandatory와 proximity의 차이](../images/snap-scroll-instead-fullpage-6.gif)
+
 _mandatory와 proximity의 차이(좌: mandatory, 우: proximity)_
 
 ### snap-scroll-align
@@ -77,6 +80,7 @@ scroll-snap-align: [ none | start | end | center ]{1,2};
 `snap-scroll-align`은 Scroll container의 자식요소가 어디서 snap해야 하는지 알려준다. Scroll container의 viewport에서 해당 축을 기준으로 어디에서 snap해야할지 알려준다. none인 경우 snap하지 않고, start/center/end는 자식요소에서 snap할 위치를 축을 기준으로 맨 앞/중간/맨 뒤로 설정한다.
 
 ![snap-scroll-align의 차이](../images/snap-scroll-instead-fullpage-7.gif)
+
 _snap-scroll-align start/center/end의 차이_
 
 ### scroll-margin/padding
@@ -146,6 +150,7 @@ main.scroll-container > div {
 header공간을 넣기 위해서 `scroll-padding-top`값을 넣어 자식요소와 header가 겹치지 않게 해놓았다. 그리고 `scroll-snap-type: y mandatory;`를 Scroll container에 넣고 `scroll-snap-align: start;`를 자식요소에 넣어 최대한 fullpage.js와 비슷하게 만들었다.
 
 ![시도1의 결과](../images/snap-scroll-instead-fullpage-8.gif)
+
 _시도1의 결과(Firefox 78)_
 
 Firefox에서 작동은 잘 되지만 header가 스크롤 위에 있어 만약 header가 `opacity: 0.5;`속성이 없다면 보기에 안 좋아지므로 다른 시도를 하기로 했다.
@@ -206,6 +211,7 @@ function App () {
 Firefox는 스크롤과 header가 분리되어있고, Scroll Snap도 정상적으로 작동하였다. 하지만...
 
 ![Chrome의 통수2](../images/snap-scroll-instead-fullpage-9.gif)
+
 _또 Chrome의 통수...(왼쪽: Firefox 78, 오른쪽: Chrome 84)_
 
 Chrome이 문제가 되었다. Chrome에서 테스트했을 때 스크롤 할 때마다 여러개의 자식요소들이 한꺼번에 지나가는 현상을 볼 수 있었다. 그래서 이 시도도 실패로 돌아갔다.
@@ -273,6 +279,7 @@ main.scroll-container > div {
 `scrollbar-width`를 `none`으로 두어 firefox의 스크롤 바를 없애고, `-ms-overflow-style`의 값도 `none`으로 두어 IE의 스크롤바도 없애준다(물론 의미는 없지만...). 마지막으로 `-webkit-scrollbar`의사요소의 값을 변경해 다른 모든 브라우저의 스크롤바를 없앤다.
 
 ![결과](../images/snap-scroll-instead-fullpage-10.gif)
+
 _하긴 했는데..(왼쪽: Firefox 78, 오른쪽: Chrome 84)_
 
 그 결과 그나마 만족한 결과가 나왔다. header가 스크롤을 가리지 않고, 애니메이션이 매끄럽게 흘러간다(Chrome은 덜 매끄럽지만).

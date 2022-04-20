@@ -15,12 +15,15 @@ tags: ["Performance", "Web"]
 스크롤 이벤트를 다루는 기술을 떠올려보면 크게 세가지가 떠오른다.
 
 ![애플 제품 소개 페이지](../images/deal-with-scroll-event-01.gif)
+
 _Scroll Interaction(Scroll Tracking)_
 
 ![리디북스 홈페이지](../images/deal-with-scroll-event-02.gif)
+
 _Lazy loading_
 
 ![Pinterest](../images/deal-with-scroll-event-03.gif)
+
 _Infinite Scroll_
 
 이러한 스크롤 이벤트를 다루는 페이지들에서는 fps drop을 중요시 여긴다. 많은 디바이스는 60fps로 작동하는 것을 인지해야 한다. 그리고 한 프레임이 `1000 / 60 ms`, 16ms 안에 렌더링을 완료 해야한다. 그렇지 않으면 서비스 이탈로 이어질 가능성이 높아진다.
@@ -218,8 +221,12 @@ _https://web.dev/debounce-your-input-handlers/#avoid-long-running-input-handlers
 
 자세한 사용방법을 원한다면 이 [링크](https://developer.chrome.com/blog/intersectionobserver/)를 참조하자.
 
-### 참고 자료
+### 추가로 볼 자료들
 
-- 추가 예정
+- [d2 blog - 최신 브라우저의 내부 살펴보기 시리즈](https://d2.naver.com/helloworld/2922312)
+- [in the event loop와 requestAnimationFrame Scheduling](https://medium.com/@paul_irish/requestanimationframe-scheduling-for-nerds-9c57f7438ef4)
+- [web.dev, passive lister를 사용해라](https://web.dev/uses-passive-event-listeners/)
+- [web.dev, layout trashing 피하기](https://web.dev/avoid-large-complex-layouts-and-layout-thrashing/)
+- [event loop 시각화](https://xnim.me/blog/javascript-browser-event-loop-layout-paint-composite-call-stack)
 
 
