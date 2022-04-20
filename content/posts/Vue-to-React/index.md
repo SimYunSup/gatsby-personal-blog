@@ -3,8 +3,8 @@ title: Vue에서 React로
 date: 2020-07-13T00:00:00
 description: 초보 개발자가 프레임워크를 Vue에서 React로 마이그레이션을 마친 후기 
 canonical_url: false
-banner: './images/koin-vue-to-react-migration-0.png'
-slug: 'koin-vue-to-react-migration'
+banner: '../images/koin-vue-to-react-migration-0.png'
+slug: '/blog/koin-vue-to-react-migration'
 published: true
 series: false
 tags: ["Devlog", "KOIN 개발기"]
@@ -13,12 +13,12 @@ tags: ["Devlog", "KOIN 개발기"]
 
 동아리에서 만든 학생 커뮤니티 서비스 개발에 참가한지도 벌써 1년이 지났다. <del>시간은 참 빨리 가는 것같다.</del>  처음에 커뮤니티 어드민 페이지 개편(이라고 쓰고 퇴화라고 부른다)에 참가했을 때는 처음 개발하는 서비스에 걱정과 두려움을 느끼면서 개발을 시작했는데 홍보게시판 개발에 참여하고 React 마이그레이션, 테스트 작성까지 마치면서 자신감이 붙게 되었다. 테스트 작성을 끝내고 비는 기간동안 KOIN 서비스의 프레임워크를 Vue에서 React로 마이그레이션을 하면서 느낀점이나 배운점을 적고 공유해보려고 한다.
 
-![동아리에서 만든 학생 커뮤니티 서비스 KOIN](./images/koin-vue-to-react-migration-1.png)
+![동아리에서 만든 학생 커뮤니티 서비스 KOIN](../images/koin-vue-to-react-migration-1.png)
 _동아리에서 만든 학생 커뮤니티 서비스 KOIN의 모습_
 
 2019년 방학이 오기 전까지는 서비스의 프론트엔드는 Vue 프레임워크로 개발을 해왔었다. 그러던 와중 시간이 많이 비는 방학동안 프레임워크를 Vue에서 React로 마이그레이션하기로 결정되었다. 하지만 Vue를 배운지 6개월, Vue로 서비스 개발을 시작한지 4개월차인 나는 프론트엔드 프레임워크를 배울 때 어렵다는 React의 위상에 겁을 먹고 있었다.
 
-![Vue를 배우면서 느꼈었던 React](./images/koin-vue-to-react-migration-3.png)
+![Vue를 배우면서 느꼈었던 React](../images/koin-vue-to-react-migration-3.png)
 _Vue를 배우면서 느꼈었던 React_
 
 하지만 React 공식문서의 튜토리얼의 처음 부분을 보고 약간 안심이 되었다.
@@ -126,7 +126,7 @@ _간단하게  React로 작성한 input 컴포넌트와 보여주는 화면_
 
 Vue에서는 `props`와 `event`를 이용한 양방향 데이터 바인딩을 한다. `props`로 자식 컴포넌트에게 데이터를 전달하고 `custom event`로 부모 컴포넌트에게 데이터와 함께 보내서 부모 컴포넌트에서 그 데이터를 다루는 함수를 자식 컴포넌트의 event에 구독한다.
 
-![`props` and event](./images/koin-vue-to-react-migration-2.png)
+![`props` and event](../images/koin-vue-to-react-migration-2.png)
 _Vue 공식 가이드에 있는 컴포넌트간 통신 모형_
 
 ```vue{codeTitle: "CustomInput.vue"}{10-12,15}
@@ -156,7 +156,7 @@ _props로 부모컴포넌트에게서 데이터를 받고 $emit으로 event를 �
 
 React는 `props`로만 통신하는 단방향 데이터 바인딩을 한다. React에서는 `event`가 없으므로 데이터와 그 데이터를 바꾸는 함수를 모두 자식 컴포넌트에게 전달하고 자식컴포넌트는 그를 이용하는 식으로 데이터를 다룬다. React의 단방향 데이터 바인딩은 다음에 기술할 반응형 시스템과 합쳐져서 후에 분석하기 좋은 코드를 만들도록 유도한다.
 
-![React 컴포넌트 간 통신모형](./images/koin-vue-to-react-migration-4.png)
+![React 컴포넌트 간 통신모형](../images/koin-vue-to-react-migration-4.png)
 _굳이 표현하자면 이런 모형_
 
 ```jsx{codeTitle: "CustomInput.js"}{4-5,9-10}
@@ -183,7 +183,7 @@ Vue와 React를 데이터를 다루는 데에 차이가 있는 이유 중 가장
 
 Vue에서는 [공식문서](https://kr.vuejs.org/v2/guide/reactivity.html)에도 말했듯이 `watcher`가 데이터가 변경되었을 때 재렌더링을 담당하는데, Vue 컴포넌트 안에 `observer`를 넣어 `data` 객체가 바뀌는 것을 관찰해서 `watcher`에게 전달하여 재렌더링을 하게 된다. 또한 참조형 변수는 참조형 변수 안의 값을 바꿨을 경우 주소가 변경되지 않으므로 data 안의 모든 참조형 변수 안에도 `observer`가 들어가 있다.
 
-![Vue를 개발하게 되면 많이 볼 __ob__](./images/koin-vue-to-react-migration-5.png)
+![Vue를 개발하게 되면 많이 볼 __ob__](../images/koin-vue-to-react-migration-5.png)
 _Vue를 개발하게 되면 많이 볼 observer_
 
 처음 공식문서로 공부를 하고 개발에 들어갔을 때 가장 당황했던게 이 시스템이였다. 전역 상태에서 객체로 된 배열을 컴포넌트로 가져와서 상태를 바꿨는데 전역 상태까지 바뀌어서 당황했던 기억이 아직도 생생하다. 그래서 이 문제는 `JSON.parse(JSON.stringify(...))`으로 관찰을 끊어서 복사본을 얻을 수 있다.

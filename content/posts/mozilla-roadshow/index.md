@@ -3,8 +3,8 @@ title: Developer Roadshow Asia:Seoul 후기
 date: 2019-11-17T00:00:00
 description: Mozilla에서 개최한 Developer Roadshow Asia를 갔다 온 후기이다.
 canonical_url: false
-slug: mozilla-developer-roadshow-2019
-banner: './images/2019-11-17-Mozilla-Roadshow-0.png'
+slug: /blog/mozilla-developer-roadshow-2019
+banner: '../images/2019-11-17-Mozilla-Roadshow-0.png'
 published: true
 series: false
 tags: ["Conference", "Web"]
@@ -14,7 +14,7 @@ tags: ["Conference", "Web"]
 
 Mozilla가 아시아를 돌면서 강연한 영상은 [여기](https://developer.mozilla.com/videos/developer-roadshow-asia-2019-playlist/) 나와있습니다!
 
-![구글 스타트업 캠퍼스에서 한 장!](./images/2019-11-17-Mozilla-Roadshow-1.jpg)
+![구글 스타트업 캠퍼스에서 한 장!](../images/2019-11-17-Mozilla-Roadshow-1.jpg)
 _Mozilla Developer Roadshow! 11월 13일 구글 스타트업 캠퍼스에서 열렸다._
 
 HTML5 Conference 2019에서 봤었던 많은 Web 기술들을 보고 미래에 적용할 기술들을 맛보고 싶어서 신청했다.
@@ -25,12 +25,12 @@ HTML5 Conference 2019에서 봤었던 많은 Web 기술들을 보고 미래에 �
 
 ## FireFox의 새로운점?
 
-![Ali Spivak라는 분이 발표하셨다.](./images/2019-11-17-Mozilla-Roadshow-3.jpg)
+![Ali Spivak라는 분이 발표하셨다.](../images/2019-11-17-Mozilla-Roadshow-3.jpg)
 _Ali Spivak라는 분이 발표하셨다. <s>빛이...</s>_
 
 ### 새로운 버전...이 아니라 새로운 로고!
 
-![Developer Version](./images/2019-11-17-Mozilla-Roadshow-2.png)
+![Developer Version](../images/2019-11-17-Mozilla-Roadshow-2.png)
 
 최신 기능이 적용되어 미리 테스트 해볼 수 있는 Nightly Version과 Nightly Version에서 충분히 안정화된 기능을 갖고 온 Developer Version의 로고가 바뀌었다!
 
@@ -67,7 +67,7 @@ HTML 요소를 보는 탭(검사기)에서 DOM 아래와 같이 변경될 때 DO
 그 이외에도 많은 기능들이 있다(다른 세션에서 발표 예정이다).
 
 ### Privacy & Security
-![여러 소셜 미디어 추적기](./images/2019-11-17-Mozilla-Roadshow-4.jpg)
+![여러 소셜 미디어 추적기](../images/2019-11-17-Mozilla-Roadshow-4.jpg)
 소셜 미디어 추적기나 교차 사이트 추적 쿠키를 방지하는 기능을 활성화 해서 추적을 방지한다. 
 기본으로 추적을 방지하는 기능을 주고 추가로 Facebook Container이라는 부가기능을 통해 Facebook 공유 버튼, 좋아요 버튼이 있는 페이지에서 생기는 Tracking을 방지한다. 
 
@@ -75,7 +75,7 @@ autoplay Block을 활성화 해서 동영상이 자동으로 재생되는 것을
 
 ## Mozlia WebThings
 
-![IoT의 미래?](./images/2019-11-17-Mozilla-Roadshow-5.jpg)
+![IoT의 미래?](../images/2019-11-17-Mozilla-Roadshow-5.jpg)
 _IoT의 미래는 밝다!_
 
 IoT의 문제점 중 하나는 보안이다.
@@ -83,7 +83,7 @@ IoT의 문제점 중 하나는 보안이다.
 
 또한 IoT는 각기 다른 회사가 모두 다른 통신방법을 사용한다는 점이 문제가 된다. _(그 예로 현재 우리 집에 있는 샤오미 공기 측정기와 Google Home이 연결이 되지 않는다.)_
 
-![상호 운용성 문제](./images/2019-11-17-Mozilla-Roadshow-6.png)
+![상호 운용성 문제](../images/2019-11-17-Mozilla-Roadshow-6.png)
 
 이런 상호 운용성 문제를 여러가지 통신 방법을 지원하여 해결하였다.
 
@@ -95,27 +95,27 @@ MicroBlock으로 WebThings Framework를 통한 기기를 만들고 그 프로그
 
 ## Mixed Reality를 Web에서 구현하기 - WebXR
 
-![Web에서 MR 구현하기](./images/2019-11-17-Mozilla-Roadshow-7.jpg)
+![Web에서 MR 구현하기](../images/2019-11-17-Mozilla-Roadshow-7.jpg)
 
 > 빠진 부분이 많아 틀릴수도 있습니다.
 
 Mixed Reality라는 분야를 들어가기 전에 파트중 AR을 택할 것인지, VR을 택할 것인지, VR헤드셋을 택할 것인지 정하게 된다.
 
-![Platform 문제](./images/2019-11-17-Mozilla-Roadshow-8.jpg)
+![Platform 문제](../images/2019-11-17-Mozilla-Roadshow-8.jpg)
 _이렇게 해도 문제, 저렇게 해도 문제가 된다.._
 
 이 이후에도 많은 플랫폼(많고 많은 VR 헤드셋..) 중에 어느 것을 지원할지 정한다. 플랫폼을 고정할 것인지, 다양한 플랫폼을 지원할 지도 문제가 된다.
 
 또 개발환경과 Delivery Mechanism(?)도 정해야한다.
 
-![해결하기 위한 결과물들?](./images/2019-11-17-Mozilla-Roadshow-9.jpg)
+![해결하기 위한 결과물들?](../images/2019-11-17-Mozilla-Roadshow-9.jpg)
 _이를 해결하기 위한 기술들_
 
 ### User Agents
 
-![WebXR의 장점1](./images/2019-11-17-Mozilla-Roadshow-10.jpg)
+![WebXR의 장점1](../images/2019-11-17-Mozilla-Roadshow-10.jpg)
 
-![WebXR의 장점2](./images/2019-11-17-Mozilla-Roadshow-11.jpg)
+![WebXR의 장점2](../images/2019-11-17-Mozilla-Roadshow-11.jpg)
 _Web MR은 다른 소프트 웨어가 필요 없고 많은 기기를 지원한다! 또한 웹이기에 많은 언어를 지원한다._
 
 앞에서 WebXR으로 브라우저를 여러개 띄우고, 한국어 자판으로 브라우저에서 검색하는 시연 영상을 보여주었다.
@@ -126,7 +126,7 @@ _Web MR은 다른 소프트 웨어가 필요 없고 많은 기기를 지원한�
 
 하지만 Flash 사용해야 하는 것이 가로막는다(현재는 WebGL을 지원한다고 한다).
 
-![Stack](./images/2019-11-17-Mozilla-Roadshow-12.svg)
+![Stack](../images/2019-11-17-Mozilla-Roadshow-12.svg)
 그렇기에 Three.js, D3.js 등 여러 라이브러리나 API 위에서 돌아가는 <a href="https://blog.mozvr.com/introducing-ecsy/" target="_blank">ECSy</a>라는 프레임워크을 만들었다.
 
 ### Social
@@ -134,7 +134,7 @@ _Web MR은 다른 소프트 웨어가 필요 없고 많은 기기를 지원한�
 <a href="https://hubs.mozilla.com" target="_blank">hubs.mozilla.org</a>에서 VR로 가상의 방을 만들어 사람들끼리 가상의 방을 만들어 만날 수 있도록 만들어놨다.
 컨텐츠를 만들어서 WebXR의 예시를 보여주는 것 같다.
 
-![WebXR의 미래](./images/2019-11-17-Mozilla-Roadshow-13.jpg)
+![WebXR의 미래](../images/2019-11-17-Mozilla-Roadshow-13.jpg)
 _여러가지 API를 추가할 예정이고 출시도 12월에 예정되어 있다._
 
 WebXR Emulator 확장 프로그램으로 WebXR의 개발자 도구에서 VR 헤드셋과 컨트롤러에 따른 화면을 테스트할 수 있다.
@@ -148,7 +148,7 @@ Native 어플리케이션을 따라잡고 실제로 쓰이려면 많은 시간�
 WEBCOMPAT은 웹 호환성을 높이기 위한 프로젝트이다.
 웹을 만들 경우 예전 브라우저(ex. IE)나 다른 브라우저를 지원하기 위한 파편화를 막을 수 없다.
 
-![끔찍한 의존성](./images/2019-11-17-Mozilla-Roadshow-14.jpg)
+![끔찍한 의존성](../images/2019-11-17-Mozilla-Roadshow-14.jpg)
 _상상만 해도 끔찍......_
 
 하지만 이를 거의 모두 지원하려 하다보면 위 사진과 같이 의존성 지옥에 빠지고, CSS코드는 매우 복잡하게 될 것이다.
@@ -183,7 +183,7 @@ Grid를 사용하지 않고 만들려면 모두 Width를 지정해줘야 한다.
 
 Firefox devtools로 Grid를 시각적으로 쉽게 조정할 수 있다.
 
-![Grid의 대한 설명](./images/2019-11-17-Mozilla-Roadshow-16.jpg)
+![Grid의 대한 설명](../images/2019-11-17-Mozilla-Roadshow-16.jpg)
 _Grid를 모르는 사람들을 위해 Grid의 간단한 설명을 해주었다._
 
 ### SubGrid?
@@ -235,7 +235,7 @@ animation 중에 작동하지 않거나 완료되지 않는 경우가 많다. �
 ### 애니메이션을 보고싶지 않은 사람이 있을 수도 있다.
 - 제어판이나 설정에서 애니메이션 표시(windows 10) 속성을 끄거나 Reduce Motion(Mac)을 키면 prefers-reduced-motion이라는 미디어 쿼리로 감지할 수 있다.
 
-![애니메이션의 단점들을 해결](./images/2019-11-17-Mozilla-Roadshow-17.jpg)
+![애니메이션의 단점들을 해결](../images/2019-11-17-Mozilla-Roadshow-17.jpg)
 
 ## 마무리
 올리는 것은 늦어졌지만 웹을 통해 여러 분야로 나아간다는 것을 실감나게 느꼈다.

@@ -3,8 +3,8 @@ title: React 테스트 시작하기 (1) - 테스트를 시작하기 전에
 date: 2021-07-29T00:00:00
 description: CRA로 만든 프로젝트에서 테스트 시작하기 전에 알아야 할 것들
 canonical_url: false
-banner: './images/start-react-testing-1-0.png'
-slug: 'start-react-test-1-before'
+banner: '../images/start-react-testing-1-0.png'
+slug: '/blog/start-react-test-1-before'
 published: true
 series: true
 tags: ["Devlog", "KOIN 개발기"]
@@ -16,7 +16,7 @@ tags: ["Devlog", "KOIN 개발기"]
 
 아쉽게도 지금은 코인의 기능을 축소하면서 작성한 테스트가 거의 다 사라졌다.
 
-![당시 작성한 테스트들](./images/start-react-testing-1-1.png)
+![당시 작성한 테스트들](../images/start-react-testing-1-1.png)
 _당시 작성한 테스트들(2020.06~2020.07)_
 
 테스트를 적용하기 전에 왜 갑자기 기존 프로젝트에 테스트를 적용하게 되었는지와 테스트의 종류와 어떤 라이브러리를 선택했는지를 살펴볼 것이다.
@@ -29,7 +29,7 @@ _당시 작성한 테스트들(2020.06~2020.07)_
 
 `Testing-Library`를 만든 kent c. dodds는 테스트를 네 가지 종류로 정의했다. 정적 테스트, 유닛 테스트, 통합 테스트, 종단 간 테스트로 나누었다.
 
-![The Testing Trophy](./images/start-react-testing-1-2.png)
+![The Testing Trophy](../images/start-react-testing-1-2.png)
 _kent c dodds가 만든 Testing Trophy_
 
 - 정적 테스트: ESLint같은 오타를 수정해주거나, TypeScript같이 타입을 올바르게 쓸 수 있게 해주는 도구로 테스트한다.
@@ -43,7 +43,7 @@ _kent c dodds가 만든 Testing Trophy_
 
 정적 테스트에서 종단간 테스트로 갈 수록 테스트에 쏟는 비용이 높아진다. 그래서 kent c. dodds는 testing trophy만큼의 테스트를 작성하는 것을 권장하고 있다(유닛 테스트와 종단간 테스트는 적게 하고 통합테스트를 많이 작성하도록).
 
-![Testing Trophy Detail](./images/start-react-testing-1-3.png)
+![Testing Trophy Detail](../images/start-react-testing-1-3.png)
 _트로피 위로 올라갈 수록 비용이 많이 들고, 속도가 느려지고, 문제가 커진다는 것을 표현하고 있다_
 
 # 테스트 기능의 종류
@@ -67,7 +67,7 @@ _트로피 위로 올라갈 수록 비용이 많이 들고, 속도가 느려지�
 
 # Jest vs Karma + Mocha + Chai...
 
-![Jest vs Karma + Mocha + Chai...](./images/start-react-testing-1-4.png)
+![Jest vs Karma + Mocha + Chai...](../images/start-react-testing-1-4.png)
 
 테스트 라이브러리하면 가장 먼저 떠오르는 것은 다름 아닌 `Jest`이다. `Jest`가 가장 먼저 떠오르는 이유는 기능이 매우 많아서 인데, 그 기능을 열거해보면 다음과 같다.
 
@@ -82,7 +82,7 @@ _트로피 위로 올라갈 수록 비용이 많이 들고, 속도가 느려지�
 
 정말 많은 것을 `Jest` 혼자 담당하니 많은 설정 없이 바로 쓸 수 있어 많은 사람들이 만족도 높게 사용한다.
 
-![Start%20React%20Testing%2019d96d2a05594ea493aac83d9ab1d9f2/Untitled%202.png](./images/start-react-testing-1-5.png)
+![Start%20React%20Testing%2019d96d2a05594ea493aac83d9ab1d9f2/Untitled%202.png](../images/start-react-testing-1-5.png)
 _State of JS 2020의 테스트 부분_
 
 그에 비해 테스트 라이브러리로 `Mocha`를 선택하면 많은 라이브러리를 조합해야 한다. 그 이유는 `Mocha`가 지원하는 기능이 제한적이기 때문이다.
@@ -94,7 +94,7 @@ _State of JS 2020의 테스트 부분_
 
 # testing-library vs Enzyme
 
-![Start%20React%20Testing%2019d96d2a05594ea493aac83d9ab1d9f2/start-react-testing-1.png](./images/start-react-testing-1-6.png)
+![Start%20React%20Testing%2019d96d2a05594ea493aac83d9ab1d9f2/start-react-testing-1.png](../images/start-react-testing-1-6.png)
 
 `Testing-Library`와 `Enzyme`은 React 컴포넌트의 테스트를 돕는 라이브러리이다. `Enzyme`은 오래 전부터 react를 테스트하는데에 쓰이고 있고, react-testing-library는 2018년에 새로 나온 라이브러리이다.
 

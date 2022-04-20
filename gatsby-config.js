@@ -12,6 +12,7 @@ module.exports = {
     siteHeadline: `Ethan Sup\'s log`,
     siteUrl: `https://ethapsup.net`,
     siteDescription: `기록을 위한 블로그`,
+    siteImage: '/static/ms-icon-310x310.png',
     siteLanguage: `ko`,
     author: `@SimYunSup`,
   },
@@ -20,6 +21,7 @@ module.exports = {
       resolve: `@lekoarts/gatsby-theme-minimal-blog`,
       // See the theme's README for all available options
       options: {
+        mdx: false,
         sharp: false,
         navigation: [
           {
@@ -37,6 +39,29 @@ module.exports = {
             url: `https://github.com/SimYunSup`,
           },
         ],
+      },
+    },
+    {
+      resolve: `gatsby-plugin-mdx`,
+      options: {
+        extensions: [`.mdx`, `.md`],
+        gatsbyRemarkPlugins: [
+          `gatsby-remark-copy-linked-files`,
+          {
+            resolve: `gatsby-remark-images`,
+            options: {
+              maxWidth: 960,
+              quality: 90,
+              linkImagesToOriginal: false,
+              backgroundColor: `transparent`,
+            },
+          },
+        ],
+      },
+    },{
+      resolve: `gatsby-transformer-remark`,
+      options: {
+        plugins: [`gatsby-remark-copy-linked-files`],
       },
     },
     {
@@ -174,7 +199,7 @@ module.exports = {
       resolve: `gatsby-plugin-sharp`,
       options: {
         defaults: {
-          formats: [`auto`],
+          formats: [`webp`, `auto`],
           quality: 90,
         },
       },

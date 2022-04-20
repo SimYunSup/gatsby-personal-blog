@@ -3,7 +3,7 @@ title: W3C HTML5 Conference 2019 후기
 date: 2019-10-27T00:00:00
 description: W3C HTML5 Conference 2019에 갔다와서 느낀 점과 들은 세션을 정리해보았다.
 canonical_url: false
-slug: 'html5-Conference-2019'
+slug: '/blog/html5-Conference-2019'
 published: true
 series: false
 tags: ["Conference", "Web"]
@@ -12,9 +12,9 @@ tags: ["Conference", "Web"]
 
  10월 11일 금요일에 코엑스 그랜드 볼룸에서 열린 W3C HTML5 Conference 2019에 다녀왔다. 아버지 따라서 건축 박람회는 많이 가봤지만 내 스스로 신청해서 가본 컨퍼런스는 처음이었고 프로그래밍 실력이 아직 낮기 때문에 알아듣지 못하는게 많지 않을까라는 생각을 안고 갔다.
 
-![인사말](./images/2019-10-27-HTML5-Conference-1.jpg)
+![인사말](../images/2019-10-27-HTML5-Conference-1.jpg)
 
-![축사](./images/2019-10-27-HTML5-Conference-2.jpg)
+![축사](../images/2019-10-27-HTML5-Conference-2.jpg)
 _인사말과 축사는 빠르게 지나갔다._
 
  아래 내용은 키노트와 세션을 들으면서 적은 느낀점과 세부 내용들이다. 듣고 이해하며 타자치는 멀티태스킹은 못 하기에 아래 내용은 실제 발표내용과 어긋날 수 있다.
@@ -24,7 +24,7 @@ _인사말과 축사는 빠르게 지나갔다._
 ## Keynote 1: Project Fugu(Google - 최홍찬)
 
 
-![Project Rugu?](./images/2019-10-27-HTML5-Conference-3.jpg)
+![Project Rugu?](../images/2019-10-27-HTML5-Conference-3.jpg)
 
 #### 다양한 Web API가 Native 수준으로 올라왔다는 것을 알 수 있게된 시간이였다.
 
@@ -100,7 +100,7 @@ _인사말과 축사는 빠르게 지나갔다._
 - 2018년 4월 모바일 발표
 
 #### 사용자 분포
-- ![웨일의 사용자 분포](./images/2019-10-27-HTML5-Conference-6.jpg)
+- ![웨일의 사용자 분포](../images/2019-10-27-HTML5-Conference-6.jpg)
 
 #### 기능
 - Clean Web(Adblock)
@@ -155,7 +155,7 @@ _인사말과 축사는 빠르게 지나갔다._
 
 ## Keynote 3: 민간 500대 웹사이트 플러그인 개선 현황 및 향후 계획(KISA -최영준)
 
-![언제나 짜증나는 ActiveX에 의 근황을 알게 되었다.](./images/2019-10-27-HTML5-Conference-9.jpg)
+![언제나 짜증나는 ActiveX에 의 근황을 알게 되었다.](../images/2019-10-27-HTML5-Conference-9.jpg)
 
 #### 과거 짜증나던 ActiveX의 근황.
 옛날에 부모님의 은행 업무나 결제를 하려고 할 때 설치하고 업데이트해야 하는 ActiveX가 매우 귀찮았던 기억이 강하다. 요즘에 스마트폰이 생기면서 볼 일이 없어졌는데 그에 대한 근황을 알게 되었다.
