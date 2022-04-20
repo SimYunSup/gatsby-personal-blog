@@ -4,7 +4,7 @@ date: 2022-04-17T00:00:00
 description: 스크롤 이벤트를 어떻게 다루어야 하는가
 canonical_url: false
 slug: /blog/deal-with-scroll-event
-banner: '../images/deal-with-scroll-event-01.gif'
+banner: '../images/deal-with-scroll-event-00.png'
 published: true
 series: false
 tags: ["Performance", "Web"]
