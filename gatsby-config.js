@@ -10,7 +10,7 @@ module.exports = {
     siteTitle: `Ethan Sup\'s log`,
     siteTitleAlt: `Ethan Sup\'s log`,
     siteHeadline: `Ethan Sup\'s log`,
-    siteUrl: `https://ethapsup.net`,
+    siteUrl: `https://ethansup.net`,
     siteDescription: `기록을 위한 블로그`,
     siteImage: '/static/ms-icon-310x310.png',
     siteLanguage: `ko`,
