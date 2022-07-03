@@ -1,5 +1,5 @@
 ---
-title: React 테스트 시작하기 (1) - 테스트를 시작하기 전에
+title: 테스트를 시작하기 전에
 date: 2021-07-29T00:00:00
 description: CRA로 만든 프로젝트에서 테스트 시작하기 전에 알아야 할 것들
 canonical_url: false
