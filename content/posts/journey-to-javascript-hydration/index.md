@@ -1,6 +1,6 @@
 ---
 title: 개발자들의 SSR 최적화 여정
-date: 2021-07-11T00:00:00
+date: 2022-07-11T00:00:00
 description: 자바스크립트 개발자들이 SSR 최적화를 위해 걸어온 여정을 가볍게 살펴본다.
 canonical_url: false
 banner: '../images/journey-to-javascript-hydration-0.png'
