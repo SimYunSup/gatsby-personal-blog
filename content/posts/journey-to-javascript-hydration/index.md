@@ -18,27 +18,28 @@ AJAX가 등장하면서 기존의 Classic Server Side Rendering(줄여서 Classi
 
 하지만 React를 모든 웹페이지에서 사용하면서 두 가지 문제가 발생하였다.
 
-1. **첫 페이지를 불러오는 시간이 길다.**
+1. **첫 페이지와 상호작용할 수 있는 시간(TTI, Time to Interactive)이 길다.**
     - React로 이루어진 페이지가 컨텐츠를 렌더링하기 걸리는 시간이 매우 길다. 컨텐츠를 렌더링까지의 과정을 정리해보면 HTML 파일 받음 - JS 파일 받음 - JS 코드 중 서버에서 JSON을 받아옴 - React 렌더링 - 실제 DOM에 렌더링이 되는데, 매우 길다.
     - 요즘 웹 페이지들이 모바일을 우선적으로 고려하는 것을 생각하면 매우 느리다.
     - 이와 같은 이유로 기타 데이터를 불러오는 시간까지 도달하기에 매우 긴 시간이 걸린다.
     - ![https://www.youtube.com/watch?v=k-A2VfuUROg&feature=youtu.be](../images/journey-to-javascript-hydration-1.png)
-2. **검색 엔진이 세부 페이지를 찾지 못한다.**
-    - 검색엔진이 색인을 생성할 수 있을 만큼 빠르게 렌더링 되지 않아서 CSR로 이루어진 웹 어플리케이션을 분석하는데 제한사항이 생긴다.
+2. **크롤러가 내용을 저장하지 못한다.**
+    - 검색 엔진의 크롤러가 내용을 저장소에 저장할 정도(내용을 긁어올 수 있을 만큼)로 빠르게 렌더링 되지 않아서 CSR로 이루어진 웹 어플리케이션을 분석하는데 제한사항이 생긴다.
+    - 크롤러가 내용을 저장하고 head에 있는 태그를 분석해서 색인을 생성하는 과정을 거쳐야 하는데 React의 경우에는 "JS 받아옴 - React 렌더링 - React-helmet을 통해 head 생성"을 거쳐야 하는데 크롤러가 이를 head를 생성할 때까지 기다리지 않을 가능성이 크다.
 
 ## hydration의 등장 (SSR)
 
-검색엔진, 즉 [SEO(검색 엔진 최적화)](https://developer.mozilla.org/ko/docs/Glossary/SEO)를 위해 Server Side Rendering 개념을 다시 이용하기로 했다. 서버에서 요청이 오면 서버에서 렌더링 한 후 HTML을 미리 생성해 보낸다. 그 이후 JS를 받아 실행한다. 근데 JS의 역할은 웹 앱을 렌더링하는 것이 아니라 기존 HTML이 제대로 렌더링되었는지 확인하고, 이벤트 핸들러를 붙여준다. 앞의 HTML이 제대로 렌더링되었는지 확인하고, 이벤트 핸들러를 붙여주는 과정을 hydration이라고 한다.
+검색엔진, 즉 [SEO(검색 엔진 최적화)](https://developer.mozilla.org/ko/docs/Glossary/SEO)를 위해 Server Side Rendering 개념을 다시 이용하기로 했다. 서버에서 요청이 오면 서버에서 렌더링 한 후 HTML을 미리 생성해 보낸다. 그 이후 JS를 받아 실행한다. 이 때 JS의 역할은 웹 앱을 렌더링하는 것이 아니라 기존 HTML이 제대로 렌더링되었는지 확인하고, 이벤트 핸들러를 붙여주는 역할이다. 앞의 HTML이 제대로 렌더링되었는지 확인하고, 이벤트 핸들러를 붙여주는 과정을 hydration이라고 한다.
 
 SSR과 다른 서버에서 하는 기능(Image Optimization, i18n...)을 해주는 Next.js를 기본으로 쓸 정도로 웹 어플리케이션 트렌드는 SSR이 기본인 상황이 되었다고 봐도 과언이 아니다(Next.js를 중심으로 생태계가 구축되고 있으니..).
 
 ### 근데.. 속도는 괜찮은가요?
 
-하지만 여전히 **첫 페이지를 불러오는 시간이 길다**는 문제는 "두번째 렌더링은 실제 DOM 렌더링에 쓰이지 않기 때문에 시간을 단축하는데 도움을 준다"라는 이유로 해결되지 않았다. SSR이라는 해결책만 사용하기에는 여러가지 단점이 있기에 개발자들은 여러 해결책을 찾아 나섰다.
+하지만 여전히 **첫 페이지와 상호작용할 수 있는 시간(TTI, Time to Interactive)이 길다**는 문제는 "두번째 렌더링은 실제 DOM 렌더링에 쓰이지 않기 때문에 시간을 단축하는데 도움을 준다"라는 이유로 해결되지 않았다. SSR이라는 해결책만 사용하기에는 여러가지 단점이 있기에 개발자들은 여러 해결책을 찾아 나섰다.
 
 ## Static Rendering(SSG)
 
-SSR은 모든 요청에 렌더링을 시작하고, HTML 파일을 만들어 응답한다. 이 때 Static Rendering은 "모든 요청"에 중점으로 해결하려고 한다. Static Rendering은 요청이 올 때마다 렌더링하는 것이 아닌, 사이트를 구축할 때 HTML을 만들어 놓고 요청이 올 때 렌더링을 하지 않고 만들어둔 HTML을 제공하는 방식이다. 정적 파일을 캐시 할 수 있고, CDN과 동작하면 높은 성능을 자랑한다.
+SSR은 모든 요청에 렌더링을 시작하고, HTML 파일을 만들어 응답한다. 이 때 Static Rendering은 "모든 요청에 렌더링을 시작한다"에 중점으로 해결하려고 한다. Static Rendering은 요청이 올 때마다 HTML을 만드는 것이 아닌, 사이트를 구축할 때 HTML을 만들어 놓고 요청이 올 때 렌더링을 하지 않고 만들어둔 HTML을 제공하는 방식이다. 정적 파일을 캐시 할 수 있고, CDN과 동작하면 높은 성능을 자랑한다.
 
 SSG는 Next.js, Gatsby, Vuepress, Nuxt.js, Gridsome 등에서 활용할 수 있다.
 
@@ -51,7 +52,7 @@ SSG는 Next.js, Gatsby, Vuepress, Nuxt.js, Gridsome 등에서 활용할 수 있�
 
 ### Increamental Static Regeneration(ISR)
 
-ISR 패턴은 SSG패턴에서 동적 데이터를 잘 활용하기 위해서 만든 패턴이다. ISR 패턴을 사용하면 전체 사이트를 재배포할 필요 없이 페이지별로 정적 재성을 다시 할 수 있다.
+ISR 패턴은 SSG패턴에서 동적 데이터를 잘 활용하기 위해서 만든 패턴이다. ISR 패턴을 사용하면 전체 사이트를 재배포할 필요 없이 페이지별로 정적 재생성을 다시 할 수 있다.
 
 ISR은 [stale-while-revalidate패턴](https://web.dev/stale-while-revalidate/)을 활용하여 정적 재생성을 돕는다. 요청 이후 일정 시간동안은 요청 때 만들었던 정적 사이트를 캐시해놓고 캐시된 사이트를 응답한다. 일정 시간 이후에는 서버에서 해당 페이지의 유효성을 확인하고 정적 사이트를 재생성한다.
 
@@ -68,10 +69,10 @@ SSR은 상호작용할 수 없는 HTML을 만들어 주고 JS를 전달해 hydra
 Progressive hydration의 기본은 어플리케이션을 청크로 나누어 성능을 향상하는 것이다. 그래서 전체 UX에 어떤 영향을 미칠지 고려해야 한다. patterns.dev에서는 Progressive hydration을 하려면 아래 사항을 충족해야 한다고 말한다.
 
 1. 모든 컴포넌트에 SSR을 사용할 수 있다.
-2. 개별 컴포넌트 또는 청크로 코드 분할을 지원합니다.
+2. 개별 컴포넌트 또는 청크로 코드 분할을 지원한다.
 3. 개발자가 정의한 순서에 따라 청크의 클라이언트 측 hydration하는 것을 지원한다.
 4. 이미 hydration된 청크에 대한 사용자 입력을 차단하지 않는다.
-5. 지연된 hydration를 가진 청크에 대해 일종의 로딩 표시기를 사용할 수 있습니다.
+5. 지연된 hydration를 가진 청크에 대해 일종의 로딩 표시기를 사용할 수 있다.
 
 React의 [동시 모드](https://reactjs.org/blog/2022/03/29/react-v18.html#gradually-adopting-concurrent-features)는 위를 충족하며 Progressive hydration을 구현할 수 있다.
 
