@@ -1,6 +1,6 @@
 ---
 title: 프로젝트 시작하기 하루 전, 생각해볼 거리들
-date: 2022-07-25T00:00:00
+date: 2022-08-04T00:00:00
 description: 개발자가 프론트엔드 프로젝트를 시작하기 전에 고려해야 할 상황들을 살펴본다(React 위주가 될 예정).
 canonical_url: false
 banner: '../images/project-with-react-0.png'
