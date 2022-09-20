@@ -1,6 +1,6 @@
 ---  
 title: React Form handling 최적화
-date: 2022-08-19T00:00:00  
+date: 2022-09-20T00:00:00  
 description: React에서 Form을 공식문서 따라서 만들면 페이지가 느려진다. ref와 useImprativeHandle로 최적화해보자.
 canonical_url: false  
 banner: '../images/make-react-form-faster-0.png'  
