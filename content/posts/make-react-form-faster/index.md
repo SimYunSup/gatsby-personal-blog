@@ -1,0 +1,334 @@
+---  
+title: React Form handling 최적화
+date: 2022-08-19T00:00:00  
+description: React에서 Form을 공식문서 따라서 만들면 페이지가 느려진다. ref와 useImprativeHandle로 최적화해보자.
+canonical_url: false  
+banner: '../images/make-react-form-faster-0.png'  
+slug: '/blog/make-react-form-faster'
+published: true
+series: false
+tags: ["React"]
+---
+
+과거 회사에서 어떻게 폼의 렌더링을 최소화할까 고민하다가 나온 결과물을 과거에 정리해 놓지 않았었다. 그로 인해 폼을 간단하게 사용하는 곳에 예시를 들 코드가 없어서 어떻게 폼 렌더링을 최소화하는가에 대한 설명이 어려웠었다. 그러다 이번에 동아리에서 진행하는 코인 리코드 작업에서 업그레이드해서 다시 만들어보았다. 이는 해당 코드를 어떻게 만들었는지 설명하는 글이며, 미래의 나와 다른 사람들이 도움이 되었으면 한다.
+
+## Form에 Controlled Input을 재렌더링이 많이 된다.
+
+React에서 Form 핸들링을 할 때 상태를 들고 있는 Controlled Input을 사용하게 되면 문제를 겪게 된다. 상태를 들고 있는 컴포넌트가 매우 Change 이벤트가 발생할 때마다 렌더링된다는 가장 큰 문제점이 존재한다. 밑은 [공식 문서에 기반해서 만든](https://ko.reactjs.org/docs/forms.html#handling-multiple-inputs) 간단한 Login Form 예시이다.
+
+```tsx
+import React from 'react';
+
+interface LoginFormValue {
+  id: string;
+  password: string;
+}
+
+const useLoginForm = (initialValue: LoginFormValue) => {
+  const [formValue, setFormValue] = React.useState<LoginFormValue>(initialValue);
+  const handleChangeForm: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    const { target } = e;
+
+    setFormValue(prevValue => ({
+        ...prevValue,
+        [target.name]: target.value
+    }));
+  };
+
+  return {
+    formValue,
+    handleChangeForm
+  };
+};
+
+// ...
+
+const LoginPage = ({ initialValue }) => {
+  const { formValue, handleChangeForm } = useLoginForm(initialValue);
+  return (
+    <form>
+      <input value={formValue.id} name="id" onChange={handleChangeForm} />
+      <input value={formValue.password} name="password" onChange={handleChangeForm} />
+      <button type="submit">입력</button>
+    </form>
+  );
+};
+```
+
+이 Login Form에서는 `onChange`이벤트가 일어날 때마다 전체 컴포넌트(`LoginPage`)가 리렌더링 된다. 전체 컴포넌트 리렌더링이 되는 현상을 어떻게 막을까?
+
+### Input에는 두가지 종류가 있다.
+
+리렌더링 방지를 위해 리렌더링이 되는 이유에 대해 알아보자. React에서 설명하는 Input의 종류는 다음과 같다.
+
+- React에서 상태를 저장하고 렌더링할 때마다 React의 상태를 DOM에 전달하는 Controlled Input(제어 컴포넌트라고 한다)
+- React에서 상태를 저장하지 않고 상태 저장을 DOM에게 맡기고 나중에 상태를 가져오는 Uncontrolled Input(비제어 컴포넌트라고 한다)
+
+그렇다면 React에서 상태를 저장하지 않고 비제어 컴포넌트를 사용하면 Form에서 불필요한 리렌더링을 줄일 수 있을까?
+
+
+```tsx
+import React from 'react';
+
+
+interface LoginFormRef {
+  [key: string]: HTMLInputElement | null;
+}
+
+const useLoginForm = () => {
+  const formRef = React.useRef<LoginFormRef>({});
+  const handleSubmitForm: React.FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault();
+    submitLogin({
+      id: formRef.current.id?.value,
+      password: formRef.current.password?.value,
+    })
+  }
+
+  return {
+    formRef,
+    handleSubmitForm
+  };
+};
+
+// ...
+
+const LoginPage = ({ initialValue }: LoginPageProps) => {
+  const { formRef, handleChangeForm } = useLoginForm();
+  return (
+    <form>
+      <input ref={(ref) => { formRef.current.id = ref; }} name="id" defaultValue={intitalValue.id} />
+      <input ref={(ref) => { formRef.current.password = ref; }} name="password" defaultValue={intitalValue.password} />
+      <button type="submit">입력</button>
+    </form>
+  );
+};
+```
+
+위와 같이 바꾸면 줄일 수 있다. 이 Login Form에서는 `onSubmit`이벤트가 일어날 때만 ref에 있는 value를 가지고 `submitLogin`함수를 수행한다. 그러면 처음 렌더링 이후에는 Login Form은 더 이상 렌더링이 일어나지 않는다.
+
+### 하지만 현실세계의 Form에서는 제어 컴포넌트가 필요하다.
+
+하지만 현실의 제품에서는 제어 컴포넌트가 필요해진다. 현실에서는 비제어 컴포넌트가 할 수 없는 것들이 너무 많다.
+- 입력 즉시 validate해서 valid한지 표시하기
+- 입력 값이 valid하지 않으면 submit 버튼 비활성화 하기
+- 입력 값 강제하기(ex. 전화번호 입력시 자동으로 하이픈(-)입력)
+- 동적 값 입력(ex. Todo list)
+- 이외에도 할 수 없는 것들이 많다.
+
+> [출처](https://goshacmd.com/controlled-vs-uncontrolled-inputs-react/)
+
+그렇다고 입력 요소가 많은 폼에서 모든 요소들을 제어 가능하게 만들면 기기 성능이 나쁜 경우에는 기기의 브라우저가 멈추는 현상까지 발생할 수 있다.
+
+이 문제를 어떻게 해결해야 할까?
+
+## 제어 컴포넌트를 비제어 컴포넌트로 감싸자.
+
+이 문제를 해결하려면 제어 컴포넌트 안에서만 validate하고 외부에서 `onSubmit`할 때 `forwardRef`와 `useImprativeHandle`로 valid한지 값만 넘겨주는 방식을 사용하면 된다.
+
+
+```tsx
+import React from 'react';
+import toast from 'any-toast-library';
+
+interface CustomInputRef {
+  value: unknown;
+  valid: string | true;
+}
+
+interface LoginFormRef {
+  [key: string]: HTMLInputElement | CustomInputRef | null;
+}
+
+const isRefCustomInputRef = (
+  elementRef: HTMLInputElement | CustomInputRef | null,
+): elementRef is CustomInputRef => (elementRef !== null
+&& Object.prototype.hasOwnProperty.call(elementRef, 'valid'));
+
+const useLoginForm = () => {
+  const formRef = React.useRef<LoginFormRef>({});
+  const handleSubmitForm: React.FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault();
+    const isCurrentValidEntries = Object.entries(refCollection.current)
+      .map((refValue): [string, string | true] => {
+        if (!refValue[1].ref) return [refValue[0], '오류가 발생했습니다.'];
+        const isCurrentNameValid = isRefCustomInputRef(refValue[1].ref)
+          ? refValue[1].ref.valid
+          : true;
+        return [refValue[0], isCurrentNameValid];
+      });
+    const invalidFormEntry = isCurrentValidEntries
+      .find((entry): entry is [string, string] => entry[1] !== true);
+    if (!invalidFormEntry) {
+      toast.open('error', invalidFormEntry[1]);
+    }
+    submitLogin({
+      id: formRef.current.id?.value,
+      password: formRef.current.password?.value,
+    })
+  }
+
+  return {
+    formRef,
+    handleSubmitForm
+  };
+};
+
+// ...
+
+const PasswordForm = React.forwardRef<CustomInputRef | null, PasswordFormProps>((props, ref) => {
+  const [password, setPassword] = React.useState('');
+  const [passwordConfirmValue, setPasswordConfirmValue] = React.useState('');
+  React.useImperativeHandle<CustomInputRef | null, CustomInputRef | null>(ref, () => {
+    return {
+      valid: validatePassword(password, passwordConfirmValue),
+      value: password,
+    };
+  }, [password, passwordConfirmValue]);
+  return (
+    <>
+      <input
+        className={cn({
+          [styles['form-input']]: true,
+          [styles['form-input--invalid']]: password.trim() !== '' && password !== passwordConfirmValue,
+        })}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <input
+        onChange={(e) => setPasswordConfirmValue(e.target.value)}
+      />
+      {validatePassword(password, passwordConfirmValue)}
+    </>
+  )
+})
+
+// ...
+
+const LoginPage = ({ initialValue }: LoginPageProps) => {
+  const { formRef, handleChangeForm } = useLoginForm();
+  return (
+    <form>
+      <input ref={(ref) => { formRef.current.id = ref; }} name="id" defaultValue={intitalValue.id} />
+      
+      <button type="submit">입력</button>
+    </form>
+  );
+};
+```
+
+위 LoginPage는 다음과 같이 동작한다
+
+1. ID는 비제어 입력 요소(Uncontrolled Input)로서 DOM에게 상태 관리를 맡긴다.
+2. password와 password-confirm은 제어 컴포넌트로 React에서 상태를 관리한다.
+  - password input과 password-confirm input이 입력될 때마다 PasswordForm이 렌더링된다.
+  - 에러가 있다면 validatePassword로 에러 메세지를 출력한다.
+3. password와 password-confirm이 입력될 때마다 ref 값이 바뀌도록 전달한다.
+  - `forwardRef`가 익명 함수 컴포넌트에 ref를 전달하고 `useImprativeHandle`을 통해 ref 값을 커스텀하여 외부에 보여준다.
+4. form에서 submit하게되면 모든 CustomInputRef에서 valid가 true인지 확인한다.
+  - valid가 string이라면 해당 값을 toast로 출력한다.
+5. valid하다면 ID는 DOM ref에서 value를 갖고오고, password는 CustomInputRef로 되어있는 ref에서 value를 갖고온다.
+
+## 간단하게 만들어볼 수 있지 않을까?
+
+`useLoginForm`을 따로 떼서 일반적인 Form에도 사용가능하도록 만들어보자.
+
+
+```tsx
+// https://github.com/BCSDLab/KOIN_WEB_RECODE/blob/develop/src/pages/Auth/SignupPage/index.tsx#L51-L94
+
+interface FormType {
+  [key: string]: {
+    ref: HTMLInputElement | CustomFormInput | null;
+    validFunction?: (value: unknown, refCollection: { current: any }) => string | true;
+  }
+}
+
+interface CustomFormInput {
+  value: unknown;
+  valid: string | true;
+}
+
+interface RegisterOption {
+  validFunction?: (value: unknown, refCollection: { current: any }) => string | true;
+  required?: boolean;
+}
+
+interface RegisterReturn {
+  ref: (elementRef: HTMLInputElement | CustomFormInput | null) => void;
+  required?: boolean;
+  name: string;
+}
+
+export interface SubmitForm {
+  (formValue: {
+    [key: string]: any;
+  }): void;
+}
+
+const isRefCustomFormInput = (
+  elementRef: HTMLInputElement | CustomFormInput | null,
+): elementRef is CustomFormInput => (elementRef !== null
+&& Object.prototype.hasOwnProperty.call(elementRef, 'valid'));
+
+const useLightweightForm = (submitForm: SubmitForm) => {
+  const refCollection = React.useRef<FormType>({});
+
+  const register = (name: string, options: RegisterOption = {}): RegisterReturn => ({
+    required: options.required,
+    name,
+    ref: (elementRef: HTMLInputElement | CustomFormInput | null) => {
+      refCollection.current[name] = {
+        ref: elementRef,
+      };
+      if (options.validFunction) {
+        refCollection.current[name].validFunction = options.validFunction;
+      }
+    },
+  });
+  const onSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    const isCurrentValidEntries = Object.entries(refCollection.current)
+      .map((refValue): [string, string | true] => {
+        if (!refValue[1].ref) return [refValue[0], '오류가 발생했습니다.'];
+        const isCurrentNameValid = isRefCustomFormInput(refValue[1].ref)
+          ? refValue[1].ref.valid
+          : refValue[1].validFunction?.(refValue[1].ref?.value ?? '', refCollection) ?? true;
+        return [refValue[0], isCurrentNameValid];
+      });
+    const invalidFormEntry = isCurrentValidEntries
+      .find((entry): entry is [string, string] => entry[1] !== true);
+    if (!invalidFormEntry) {
+      const formValue = Object.entries(refCollection?.current).map((nameValue) => {
+        if (isRefCustomFormInput(nameValue[1].ref) || nameValue[1].ref !== null) {
+          return [nameValue[0], nameValue[1].ref.value];
+        }
+        return [nameValue[0], undefined];
+      });
+      submitForm(Object.fromEntries(formValue));
+      return;
+    }
+    toast.open('error', invalidFormEntry[1]);
+  };
+  return {
+    register,
+    onSubmit,
+  };
+};
+```
+
+validFunction을 통해 submit할 때 validate하는 기능과 함께 리팩토링하였다.
+
+이외에도 여러가지 기능을 만들 수 있을 것이다.
+
+- onChange/onBlur시 revalidate하기
+- defaultValue 부여하기
+- CustomInputRef를 없애고 일반적인 ref를 value만 가지고 있는 것으로 변경 후 valid는 validFunction으로만 관리하기
+- ...
+
+## 이걸 위해 라이브러리가 있네요.
+
+이것을 위해 만들어진 라이브러리가 있다. 바로 [react-hook-form](https://react-hook-form.com/)이다.
+
+react-hook-form을 쓰게 되면 이러한 구현 없이 빠르게 비제어 컴포넌트로 감싸는 작업과 함께 성능 최적화를 할 수 있다.
+
+처음부터 react-hook-form을 따로 쓰지 않은 이유는 `forwardRef`와 `useImprativeHandle`의 사용방법, 그리고 react-hook-form이 어떻게 동작하는지(모든 동작과정을 구현하지는 않았지만) 알고 가면 좋겠다라는 점에서 만들었다.
