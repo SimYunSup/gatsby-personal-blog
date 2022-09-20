@@ -46,7 +46,7 @@ const useLoginForm = (initialValue: LoginFormValue) => {
 const LoginPage = ({ initialValue }) => {
   const { formValue, handleChangeForm } = useLoginForm(initialValue);
   return (
-    <form>
+    <form onSubmit={submitLogin}>
       <input value={formValue.id} name="id" onChange={handleChangeForm} />
       <input value={formValue.password} name="password" onChange={handleChangeForm} />
       <button type="submit">입력</button>
@@ -94,11 +94,11 @@ const useLoginForm = () => {
 // ...
 
 const LoginPage = ({ initialValue }: LoginPageProps) => {
-  const { formRef, handleChangeForm } = useLoginForm();
+  const { formRef, handleSubmitForm } = useLoginForm();
   return (
-    <form>
-      <input ref={(ref) => { formRef.current.id = ref; }} name="id" defaultValue={intitalValue.id} />
-      <input ref={(ref) => { formRef.current.password = ref; }} name="password" defaultValue={intitalValue.password} />
+    <form onSubmit={handleSubmitForm}>
+      <input ref={(ref) => { formRef.current.id = ref; }} name="id" defaultValue={initialValue.id} />
+      <input ref={(ref) => { formRef.current.password = ref; }} name="password" defaultValue={initialValue.password} />
       <button type="submit">입력</button>
     </form>
   );
@@ -170,7 +170,7 @@ const useLoginForm = () => {
 
   return {
     formRef,
-    handleSubmitForm
+    handleSubmitForm,
   };
 };
 
