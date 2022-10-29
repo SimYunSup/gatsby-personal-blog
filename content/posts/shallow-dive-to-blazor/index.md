@@ -34,4 +34,166 @@ Blazor의 [튜토리얼](https://learn.microsoft.com/ko-kr/aspnet/core/blazor)�
 
 라우팅은 파일 기반 라우팅을 사용하고 있으며 `@page`지시문이 있는 파일만 라우팅에 포함한다. 동적 라우팅 또한 지원하며 동적 라우팅의 제약조건을 설정하는 것또한 가능하다. Routing이 변했을 경우 생명주기인 `LocationChanged`도 제공한다.
 
-##
+## 실제 프로젝트에서는
+
+위의 특징 말고도 실제 프로젝트에서 만나볼 수 있는 특징들을 살펴보려고 한다.[]() 기반으로 만들어진 [](https://github.com/SimYunSup/PUSH_SERVER_WEB)
+
+### 리스트 렌더링 및 조건부 렌더링
+
+리스트 렌더링과 조건부 렌더링은 C#의 구문을 따른다. `@if(조건문)`를 통해 조건문에 맞는 중괄호 내의 HTML 태그들을 렌더링한다. 그리고 `@foreach(var 요소 in Iterable<요소타입>)`으로 중괄호 내의 HTML태그 렌더링을 반복한다.
+
+```cs
+<ul>
+    @if (isShowingNumber == true)
+    {
+        @foreach (var ProjectNumber in new number[]{ 1,2,3,4,5 }) {
+            <li class="num">
+                @ProjectNumber
+            </li>
+        }
+    }
+</ul>
+```
+
+### HttpClient 래핑
+
+여타 다른 JS 프레임워크에서도 그렇듯이 API Call을 담당하는 HttpClient를 래핑하여 사용한다. 밑은 access token - refresh token을 사용하는 프로그램에서 간단하게 래핑한 HttpClient를 보여준다.
+
+```cs
+using PUSH_SERVER_WEB.Models;
+using Microsoft.AspNetCore.Components;
+using System.Net;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
+using Microsoft.JSInterop;
+
+namespace PUSH_SERVER_WEB.Services
+{
+    public interface IHttpService
+    {
+        Task<T?> Get<T>(string uri);
+        Task<T?> Post<T>(string uri, object value);
+        Task<T?> Delete<T>(string uri);
+        Task<T?> Put<T>(string uri, object value);
+        Task<T?> Patch<T>(string uri, object value);
+    }
+
+    public class HttpService : IHttpService
+    {
+        // ...구현부 생략
+
+        private async Task<T?> sendRequest<T>(HttpRequestMessage request, string uri)
+        {
+            // add jwt auth header if user is logged in and request is to the api url
+            var token = await _localStorageService.GetItem<string>("accessToken");
+            var isApiUrl = !request.RequestUri?.IsAbsoluteUri ?? false;
+            if (token != null && isApiUrl)
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            
+            var response = await _httpClient.SendAsync(request);
+
+            // auto logout on 401 response
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                if (uri != "/api/user/refresh")
+                {
+                    try
+                    {
+                        var RefreshToken = await _localStorageService.GetItem<string>("refreshToken");
+
+                        var Response = await Post<User>("/api/user/refresh", new { refresh_token= RefreshToken });
+
+                        await _localStorageService.SetItem("refreshToken", Response?.refresh_token);
+                        await _localStorageService.SetItem("accessToken", Response?.access_token);
+                        response = await _httpClient.SendAsync(request);
+                    }
+                    catch
+                    {
+                        await _localStorageService.RemoveItem("refreshToken");
+                        await _localStorageService.RemoveItem("accessToken");
+                        _navigationManager.NavigateTo("/login");
+                        return default;
+                    }
+                }
+                else
+                {
+                    await _localStorageService.RemoveItem("refreshToken");
+                    await _localStorageService.RemoveItem("accessToken");
+                    _navigationManager.NavigateTo("/login");
+                    return default;
+                }
+            }
+
+            // throw exception on error response
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadFromJsonAsync<Dictionary<string, string>>();
+                if (error != null)
+                {
+                    throw new Exception(error["error_message"]);
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            }
+            var sb = new StringBuilder();
+            var body = await response.Content.ReadAsStringAsync();
+            if (!string.IsNullOrWhiteSpace(body))
+                sb.AppendLine(body);
+            if (sb.ToString() != "")
+            {
+                return await response.Content.ReadFromJsonAsync<T>();
+            }
+            else
+            {
+                return default;
+            }
+        }
+    }
+}
+```
+
+### 이외에도...
+
+- 프론트엔드에 존재하는 MSW같이 backend API를 mocking하여 backend API가 만들어지기 전까지 HttpClient를 mocking하는 것 또한 존재한다.
+  - 자세한 것은 [다음 구현](https://jasonwatmore.com/post/2020/08/13/blazor-webassembly-jwt-authentication-example-tutorial#fake-backend-handler-cs)을 참고하자.
+- EditForm 컴포넌트로 form 데이터의 유효성을 검사할 수 있다.
+  - Model을 지정할 수 있는데 이때 `Required`, `StringLength()`, `Range`등 여러가지의 특성을 활용해 유효성 검사를 쉽게 할 수 있다.
+- 개발하다보면 JS를 호출해야 할 상황이 올 수 있다. 이때 TypeScript를 사용하여 Type 검사를 진행할 수도 있다.
+  - 이것은 [다음 컨퍼런스 발표](https://forum.dotnetdev.kr/t/blazor-webassembly-webpack-sass-typescript-net-conf-2022-x-seoul-replay/3087)를 바탕으로 세팅을 하면 된다.
+  - 하지만 이 컨퍼런스와 다른 부분은 `index.js`를 직접 import 하지말고 JSRuntime에서 [JS 파일를 호출하는 방식](https://learn.microsoft.com/ko-kr/aspnet/core/blazor/javascript-interoperability/call-javascript-from-dotnet?view=aspnetcore-6.0#javascript-isolation-in-javascript-modules)을 사용하는 것이 전역 네임스페이스를 오염시키지 않는다는 점에서 좋다.
+  - 이를 위해서 webpack 설정에 다음 구문을 추가해야 한다.
+  ```js
+  module.exports = {
+    // ...
+    output: {
+        path: path.resolve(__dirname, "wwwroot/build"),
+        filename: "index.js",
+        libraryTarget: 'umd',
+        library: '라이브러리 이름',
+    },
+    // ...
+  }
+  ```
+  - 그리고 C#에서는 다음과 같이 호출해야 한다.
+  ```cs
+  @code {
+    private IJSObjectReference? module;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            module = await JS.InvokeAsync<IJSObjectReference>("import", 
+                "./index.js");
+        }
+    }
+
+    public async ValueTask<string?> Prompt(string message) =>
+        module is not null ? 
+            await module.InvokeAsync<string>("showPrompt", message) : null;
+}
+  ```
