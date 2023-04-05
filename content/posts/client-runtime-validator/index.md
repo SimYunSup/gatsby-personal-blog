@@ -1,0 +1,198 @@
+---
+title: 클라이언트에서 데이터 검증하기
+date: 2023-04-06T00:00:00
+description: 클라이언트(런타임)에서 데이터를 검증하는 방식에 대해 알아본다.
+canonical_url: false
+slug: /blog/client-runtime-validator
+banner: '../images/client-runtime-validator-00.png'
+published: true
+series: false
+tags: ["Library", "Web"]
+---
+
+JS는 기본적으로 동적 프로그래밍 언어로서 타입이 런타임에 결정된다. 그래서 올바르지 않은 타입을 넣게 되면 타입 에러가 발생한다. 그래서 서버에서 반환하는 JSON 형식을 바꾸게 되면, 또는 어떤 모듈에서 입력 형식을 바꾸면 데이터를 처리하는 과정에서 에러를 발생하는 경우가 발생한다.
+
+그래서 많은 사람들이 다양한 방법으로 클라이언트가 서버에서 반환하는 데이터 형식이나 모듈에서 입력받은 데이터 형식을 검증하려는 방법을 찾아왔다.
+
+- API의 버저닝(서버에서 반환하는 데이터 형식이나 호출하는 URI를 변경)
+- 정적 타입 검사/테스트(ex. TypeScript)
+- **클라이언트 측에서의 데이터 형식 검증**
+- 그 외의 방법….
+
+우리는 **클라이언트 측에서의 데이터 형식 검증**에 대해서 자세히 알아보고 어떤 방법이 있는지 확인해보려고 한다.
+
+## TypeScript를 사용하는 것은 클라이언트 측에서의 데이터 형식 검증이 아닌가요?
+
+TypeScript는 JavaScript의 확장된 언어로서 JavaScript로 컴파일된다. 즉 컴파일 타임에서만 타입이 유효한지 확인하고 문제가 없다면 JavaScript로 컴파일되어 타입 검증을 하지 않는다. 또한 트랜스파일하는 라이브러리들 중 몇몇(esbulid, swc…)은 타입체크를 하지 않고 JS로 변경하기 때문에 TypeScript를 사용하는 것이 안전하다고만 생각할 수는 없다(그래서 vite는 빌드 전에 tsc를 실행한다.).
+
+이야기가 딴 곳으로 샜는데, TypeScript는 결국 개발(IDE 혹은 컴파일)할 때만 데이터 형식 검증을 하고, 그 이후는 검증하지 않기 때문에 클라이언트 측에서의 데이터 형식 검증이라고 보기 힘들어서 따로 구분해놨다.
+
+## 클라이언트에서 수동으로 체크
+
+가장 먼저 가장 쉽고, 가장 기본적인 방법은 수동으로 체크하는 것이다. JavaScript는 기본적으로 `typeof`, `instanceof`연산자를 통해서 여러가지 타입, 클래스를 구분할 수 있다.
+
+```jsx
+function isString(value) {
+	return typeof value === 'string';
+}
+```
+
+하지만 쉽고 기본적인 방법인 만큼, 단점도 명확합니다. 업데이트/동기화가 제때 안되면 오류가 발생할 수 있고, 수동으로 체크하는 로직이 길어지면 분석과 업데이트나 동기화가 어려워질 가능성이 커집니다.
+
+## JSON Schema
+
+JSON Schema는 JSON 형식이 유효한지 확인하고 주석을 달 수 있는 선언형 언어이다. 
+
+```json
+{
+  "$id": "https://example.com/address.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "An address JSON",
+  "type": "object",
+  "properties": {
+    "post-office-box": {
+      "type": "string"
+    },
+    "street-address": {
+      "type": "string"
+    },
+    "locality": {
+      "type": "string"
+    },
+    "country-name": {
+      "type": "string"
+    }
+  },
+  "required": [ "locality" ],
+  "dependentRequired": {
+    "post-office-box": [ "street-address" ]
+  }
+}
+```
+
+*JSON Schema에서 제공하는 예시*
+
+포맷이 정해져있고(버전별 포맷이 따로 있다), 수동으로 체크하는 것보다는 읽기 쉽다. 하지만 이 언어를 보고 직접 수동으로 검증을 하는 것은 모두 수동으로 검증하는 것보다는 쉽겠지만 이도 많은 시간을 들여야 한다.
+
+## 검증 라이브러리
+
+수동으로 검증하는 것이 업데이트/동기화가 어렵다면 많은 사람들이 쓰는 라이브러리를 사용하면 편하게 검증할 수 있다. 검증 라이브러리 또한 여러가지 전략이 있어 이 또한 나눠서 소개하고자 한다.
+
+### JSON schema를 기반으로 검증
+
+앞에서 설명한 JSON schema를 기반으로 검증을 실행하는 라이브러리이다. 앞에서 설명한 장점을 가지면서 JSON을 쉽게 검증할 수 있다는 장점 모두 들고 갈 수 있다.
+
+하지만 JSON schema를 직접 작성해야 한다는 단점은 그대로 온다는 점도 인지하고 있어야 할 것이다.
+
+대표적으로는 [ajv](https://github.com/ajv-validator/ajv) 가 있다. 간단하게 다음과 같이 쓴다.
+
+```jsx
+import Ajv from 'ajv';
+// schema 파일
+import AddressSchema from './address-schema.json';
+
+// 데이터
+const address = {
+  // ...
+};
+const validator = new Ajv();
+const validate = ajv.compile(AddressSchema);
+const isAddressValid = validate(address);
+```
+
+### TypeScript를 기반으로 검증
+
+TypeScript를 기반으로 코드를 생성하여 검증하는 방식이다. 앞에서 말한 “컴파일타임은 TypeScript의 타입으로 검증하고, 그를 기반으로 JavaScript 코드를 생성해서 런타임에도 검증하자”라는 기반에서 생긴 방식이다. TypeScript 코드를 JavaScript코드로 컴파일해주므로 트랜스파일링이라고 볼 수도 있다.
+
+동기화가 필요없는 것도 장점으로 작용하고, 사용하기 쉽다는 것도 장점으로 작용한다. 하지만 개발자가 원하는 모든 방식을 지원하지 않을 수도 있다는 점이 단점으로 작용한다.
+
+현재 maintain되고 있는 라이브러리는 [typia](https://github.com/samchon/typia), [class-validator](https://github.com/typestack/class-validator)밖에 없는 것 같다. typia는 신기하게 사용자정의 타입 검증을 jsdoc방식으로 지원하고 있다. class-validator는 데코레이터 패턴을 삽입하여 검증한다. typia는 다음과 같이 사용한다.
+
+```tsx
+type Address = {
+	/**
+	 * @length 5
+	 */
+	locality: string;
+	"country-name"?: string;
+} | {
+	/**
+	 * @length 5
+	 */
+	locality: string;
+	"post-office-box": string;
+	"street-address": string;
+	"country-name"?: string;
+}
+
+const isAddressValid = typia.is<Address>(address);
+```
+
+### 라이브러리에서 제공하는 타입으로 검증
+
+남은 한가지 방식은 커스텀 타입을 라이브러리가 제공해서 이를 사용하는 방식이다. 라이브러리가 보통 읽기 쉽게 default import에서 체이닝하는 방식으로 schema를 만든다. 생성된 schema를 바탕으로 검증하는 메소드를 만들어줘서 그걸 통해 검증한다.
+
+라이브러리가 제공하는 타입을 사용하면 좋은 점은 체이닝을 활용해 알아보기 쉽다는 점, 사용하기도 쉽다는 점이 맨 첫번째로 꼽힌다. 위 검증 방식과 비슷하게 사용자가 원하는 모든 방식을 지원하지 않을 수 있다는 점이 단점으로 꼽힌다.
+
+가장 대표적인 라이브러리로는 [joi](https://github.com/hapijs/joi)가 있다. joi는 다음과 같이 사용한다.
+
+```jsx
+import Joi from 'joi';
+
+const addressSchema = Joi.object({
+	locality: Joi.string().length(5).required(),
+  "country-name": Joi.string(),
+  "street-address": Joi.string(),
+  "post-office-box": Joi.string(),
+}); // 일부 생략
+
+// throw error when invalid.
+const { value: validAddress } = addressSchema.validate(address);
+```
+
+## 생성(또는 생성 및 검증) 라이브러리
+
+위의 세가지 방법 중 TypeScript를 제외한다면 TypeScript를 지원하는 방식은 존재하지 않는다. 많은 회사에서 TypeScript를 기본 스택으로 가져가고 있는 상황인데 TypeScript의 지원을 하지 않는다면 타입 검증을 하더라도 반쪽짜리 타입검증이 될 것이다. 모든 테스트는 런타임에서만 할 수 있고, 컴파일타임인 IDE에서는 아무런 검증을 할 수 없으니(한 가지 방법 빼고) 반쪽짜리일 수 밖에 없다. 그래서 개발자들이 검증 라이브러리를 잘 사용하기 위해서 생성 라이브러리를 만들었다. 생성하는 라이브러리는 다음과 같다.  
+
+### 라이브러리에서 제공하는 타입에서 TypeScript를 생성
+
+가장 간단한 생각인 “라이브러리에서 제공하는 타입에서 TypeScript를 지원하자”를 그대로 구현한 방식이다. 라이브러리에서 만든 스키마가 TypeScript에서 타입으로 변하므로 라이브러리에서 제공하는 타입으로 검증하는 방식의 장점을 가져갈 수도 있으며 컴파일 타임에서 똑같이 검증할 수 있으므로 두 장점을 모두 가져갈 수 있다.
+
+대표적인 라이브러리로는 [yup](https://github.com/jquense/yup), [zod](https://github.com/colinhacks/zod), [io-ts](https://github.com/gcanti/io-ts), [superstruct](https://github.com/ianstormtaylor/superstruct)…등 많은 라이브러리가 있으며 많은 라이브러리가 있으니 이 중에서 자신이 원하는 기능을 지원하는 라이브러리를 [골라서](https://npmtrends.com/io-ts-vs-joi-vs-superstruct-vs-yup-vs-zod) 사용하면 된다. zod는 다음과 같이 사용한다.
+
+```tsx
+import { z } from "zod";
+
+const AddressSchema = z.object({
+	locality: z.string().length(5).required(),
+  "country-name": z.string(),
+  "street-address": z.string(),
+  "post-office-box": z.string(),
+});
+
+AddressSchema.parse(address);
+
+type Address = z.infer<typeof AddressSchema>;
+```
+
+### 라이브러리에서 제공하는 타입에서 JSON schema를 생성
+
+라이브러리에서 제공하는 타입에서 JSON schema를 생성하는 방식이다. 라이브러리에서 제공하는 타입이 JSON schema로 생성하는 것만 사용하여 JSON schema를 바탕으로 검증하는 다른 라이브러리를 사용하는 경우도 있다(하지만 모든 라이브러리에서 검증을 지원한다).
+
+유명한 라이브러리로는 [@sinclair/typebox](https://github.com/sinclairzx81/typebox)가 존재한다. 이외에도 서드파티로 JSON schema를 생성하는 것([joi-to-json](https://github.com/kenspirit/joi-to-json), [zod-to-json-schema](https://github.com/StefanTerdell/zod-to-json-schema), [class-validator-jsonschema](https://github.com/epiphone/class-validator-jsonschema#readme)…)을 지원한다.
+
+## 글을 마치기 전에 생각해봐야 할 것
+
+이 글이 이렇게 길어질까?라고 생각할만큼 엄청나게 길어졌다. 이 중에서 장단점을 비교해가며 자신의 프로젝트에 적용하기 전에 "자신의 프로젝트에 필요할 것인가?"를 먼저 고민해봐야 한다고 생각한다. 클라이언트 측의 데이터 검증은 서버에서 검증보다 더 많은 단점을 동반한다.
+
+- 검증 라이브러리만큼의 **파일 크기가 커진다**(결코 적은 파일 크기가 아니다). 이는 클라이언트의 TTFB에 영향을 끼친다.
+- 검증하는 코드를 실행하는 시간이 클라이언트에서(백엔드에서도 쓰면 백엔드에서도) 발생한다.
+- 개발자가 라이브러리를 배워야 하는 시간도 무시할 수 없다.
+
+현재 개발자들이 파일 크기를 줄여 TTFB 및 Web Vitals를 줄이려는 시도가 많은 시점에서 첫번째 단점이 매우 크게 작용한다고 생각한다. 그러므로 클라이언트 프로젝트에 런타임 검증이 필요할 것인가?에 대한 고민을 충분히하고 프로젝트에 적용하기를 바란다.
+
+### 출처
+
+- [이 글의 바탕이 된 글](https://learning-notes.mistermicheels.com/javascript/typescript/runtime-type-checking)
+- [찾다가 나온 글](https://blog.logrocket.com/methods-for-typescript-runtime-type-checking/)
+
