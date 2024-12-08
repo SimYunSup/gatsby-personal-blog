@@ -1,0 +1,2 @@
+[*.{js,mjs,ts,mts,astro}]
+tab_width = 2
