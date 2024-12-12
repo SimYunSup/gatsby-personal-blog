@@ -1,11 +1,12 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import icon from 'astro-icon';
 
 // https://astro.build/config
 export default defineConfig({
-	integrations: [
-		starlight({
-			title: {
+  integrations: [
+    starlight({
+      title: {
         en: 'Ethan Sup\'s logs',
         ko: '생각 덩어리'
       },
@@ -14,15 +15,20 @@ export default defineConfig({
         src: './public/favicon-96x96.png',
       },
       // favicon: '/public/favicon-',
-			social: {
-				github: 'https://github.com/SimYunSup',
-			},
+      social: {
+        github: 'https://github.com/SimYunSup',
+      },
+      customCss: [
+        './src/styles/custom.css',
+        './src/styles/component.css'
+      ],
       locales: {
         ko: {
           label: '한국어',
         },
       },
       defaultLocale: 'ko',
-		}),
-	],
+    }),
+    icon(),
+  ],
 });

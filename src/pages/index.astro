@@ -1,0 +1,109 @@
+---
+import type { StarlightPageProps } from "@astrojs/starlight/props";
+import StarlightPage from "@astrojs/starlight/components/StarlightPage.astro";
+import { Icon } from "astro-icon/components";
+import { LinkButton, Card } from "@astrojs/starlight/components";
+import "../styles/pages/index.css";
+
+type Frontmatter = StarlightPageProps['frontmatter'];
+const frontmatter = {
+  title: 'blog',
+  template: 'splash',
+  hero: {
+    title: '',
+  },
+} satisfies Frontmatter;
+---
+<StarlightPage
+  frontmatter={frontmatter}
+>
+<main class="main-container">
+  {/* Hero Section */}
+  <section class="hero-section">
+    <div class="hero-bg"></div>
+    <div class="hero-container">
+      <div class="hero-content">
+        <div class="hero-text">
+          <div class="highlight">Welcome to my digital lighthouse</div>
+          <h1 class="title">Illuminating Ideas Through Code</h1>
+          <p class="description">
+            A beacon of knowledge sharing technical insights, development
+            journey, and programming discoveries.
+          </p>
+          <div class="button-group">
+            <LinkButton href="/posts" variant="primary">
+              Explore Posts
+              <Icon name="lucide:arrow-right" />
+            </LinkButton>
+            <LinkButton href="/about" variant="secondary">
+              About Me
+            </LinkButton>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* Featured Posts Section */}
+  <section class="featured-posts-section">
+    <div class="section-header">
+      <div>
+        <h2 class="featured-title">Featured Posts</h2>
+        <p class="featured-subtitle">
+          Latest insights and discoveries from my development journey
+        </p>
+      </div>
+      <LinkButton href="/posts" variant="primary" class="view-all-button">
+        View All
+        <Icon name="lucide:arrow-right" />
+      </LinkButton>
+    </div>
+    <div class="posts-grid">
+      {
+        [1, 2, 3].map((i) => (
+          <div class="post-card">
+            <div class="post-thumbnail"></div>
+            <div class="post-content">
+              <div class="post-meta">
+                <span class="category">Development</span>
+              </div>
+              <div class="post-info">
+                <h3 class="post-title">
+                  Understanding Modern Web Architecture
+                </h3>
+                <p class="post-description">
+                  Deep dive into the principles of modern web architecture and
+                  best practices for scalable applications.
+                </p>
+              </div>
+              <a>asdf</a>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  {/* Newsletter Section */}
+  <section class="newsletter-section">
+    <div class="newsletter-bg"></div>
+    <div class="newsletter-container">
+      <div class="newsletter-content">
+        <h2 class="newsletter-title">Stay Updated with My Newsletter</h2>
+        <p class="newsletter-description">
+          Get the latest posts, coding tips, and insights delivered directly to
+          your inbox.
+        </p>
+        <form class="newsletter-form">
+          <input
+            type="email"
+            placeholder="Enter your email"
+            class="email-input"
+          />
+          <button class="subscribe-button"> Subscribe </button>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+</StarlightPage>

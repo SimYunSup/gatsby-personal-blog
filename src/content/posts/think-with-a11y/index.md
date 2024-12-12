@@ -3,7 +3,7 @@ title: 웹 접근성을 한 번 생각해보기
 lastUpdated: 2022-10-03T00:00:00  
 description: 우리는 보통 장애인의 반대되는 사람들을 상대로 서비스를 만든다. 그렇다면 장애인들을 위해서는 서비스의 어떤 것을 고려해야할까?
 cover: '../images/think-with-a11y-0.png'
-slug: '/blog/think-with-a11y'
+slug: '/docs/think-with-a11y'
 ---
 
 프론트엔드 개발자들은 개발을 배워가면서 웹 접근성과 의미론적인 웹에 대해 들어본 적이 있을 것이다(없다면 이 포스트에서 약하게나마 알아보자).

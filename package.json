@@ -13,12 +13,23 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/starlight": "^0.29.2",
-    "astro": "^4.16.10",
+    "@astrojs/starlight": "^0.29.3",
+    "@iconify-json/lucide": "^1.2.18",
+    "@shoelace-style/shoelace": "^2.19.1",
+    "astro": "^5.0.5",
     "sharp": "^0.32.5"
+  },
+  "pnpm": {
+    "overrides": {
+      "@astrojs/mdx": "^4.0.0"
+    },
+    "patchedDependencies": {
+      "@astrojs/starlight": "patches/@astrojs__starlight.patch"
+    }
   },
   "packageManager": "pnpm@9.14.4+sha512.c8180b3fbe4e4bca02c94234717896b5529740a6cbadf19fa78254270403ea2f27d4e1d46a08a0f56c89b63dc8ebfd3ee53326da720273794e6200fcf0d184ab",
   "devDependencies": {
+    "astro-icon": "^1.1.4",
     "typescript": "^5.7.2"
   }
 }

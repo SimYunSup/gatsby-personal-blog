@@ -1,0 +1,29 @@
+diff --git a/components/Page.astro b/components/Page.astro
+index 0ab90d1bacb10bb27ed1351f693358f8f90214f5..c8da2952de434caa3c6975525de55ed442bedd91 100644
+--- a/components/Page.astro
++++ b/components/Page.astro
+@@ -41,7 +41,7 @@ const pagefindEnabled =
+ 	lang={Astro.props.lang}
+ 	dir={Astro.props.dir}
+ 	data-has-toc={Boolean(Astro.props.toc)}
+-	data-has-sidebar={Astro.props.hasSidebar}
++	data-has-sidebar={Astro.props.hasSidebar ? true : undefined}
+ 	data-has-hero={Boolean(Astro.props.entry.data.hero)}
+ 	data-theme="dark"
+ >
+diff --git a/utils/routing.ts b/utils/routing.ts
+index b365fb5f8e0f51b865f97e6a82365485532cdeaa..b0fa05d27d60a0dcd09e11e2b6494dd9fc98e3c1 100644
+--- a/utils/routing.ts
++++ b/utils/routing.ts
+@@ -51,9 +51,9 @@ const docs: StarlightDocsEntry[] = (
+ 		// In production, filter out drafts.
+ 		return import.meta.env.MODE !== 'production' || data.draft === false;
+ 	})) ?? []
+-).map(({ slug, ...entry }) => ({
++).map((entry) => ({
+ 	...entry,
+-	slug: normalizeIndexSlug(slug),
++	slug: normalizeIndexSlug(entry.id),
+ }));
+ 
+ function getRoutes(): Route[] {
