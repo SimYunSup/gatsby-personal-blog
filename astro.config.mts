@@ -1,6 +1,12 @@
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import icon from 'astro-icon';
+
+import { RehypeFigurePlugin } from './src/config/rehype/figure';
+
+const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // https://astro.build/config
 export default defineConfig({
@@ -28,7 +34,25 @@ export default defineConfig({
         },
       },
       defaultLocale: 'ko',
+      components: {
+        Sidebar: './src/components/Sidebar.astro',
+        PageFrame: './src/components/PageFrame.astro',
+        Hero: './src/components/Hero.astro',
+      },
     }),
     icon(),
   ],
+  vite: {
+    resolve: {
+      alias: {
+        '@components': path.resolve(dirname, './src/components'),
+        '@styles': path.resolve(dirname, './src/styles'),
+      }
+    }
+  },
+  markdown: {
+    rehypePlugins: [
+      RehypeFigurePlugin,
+    ],
+  },
 });

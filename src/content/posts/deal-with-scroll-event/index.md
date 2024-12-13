@@ -2,8 +2,11 @@
 title: 스크롤 이벤트 제대로 다루기(w. 브라우저 렌더링 원리)
 lastUpdated: 2022-04-17T00:00:00
 description: 스크롤 이벤트를 어떻게 다루어야 하는가
-slug: /blog/deal-with-scroll-event
+slug: '/blog/deal-with-scroll-event'
 cover: '../images/deal-with-scroll-event-00.png'
+hero:
+  image:
+    file: '../images/deal-with-scroll-event-00.png'
 ---
 
 ## 들어가며

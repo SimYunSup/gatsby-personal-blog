@@ -1,0 +1,111 @@
+---
+import type { StarlightPageProps } from "@astrojs/starlight/props";
+import StarlightPage from "@astrojs/starlight/components/StarlightPage.astro";
+import { Icon } from "astro-icon/components";
+import { LinkButton, Card } from "@astrojs/starlight/components";
+import "@styles/pages/index.css";
+import { getCollection } from "astro:content";
+
+type Frontmatter = StarlightPageProps['frontmatter'];
+const frontmatter = {
+  title: 'blog',
+  template: 'splash',
+  hero: {
+    title: '',
+  },
+} satisfies Frontmatter;
+const posts = await getCollection("docs");
+const recentPosts = posts
+  .sort((a, b) => (b.data.lastUpdated as Date).getTime() - (a.data.lastUpdated as Date).getTime())
+  .slice(0, 3);
+---
+<StarlightPage
+  frontmatter={frontmatter}
+>
+<main class="main-container">
+  {/* Hero Section */}
+  <section class="hero-section">
+    <div class="hero-bg"></div>
+    <div class="hero-container">
+      <div class="hero-content">
+        <div class="hero-text">
+          <div class="highlight">Welcome to my digital lighthouse</div>
+          <h1 class="title">안녕하세요! 저는 심윤섭입니다.</h1>
+          <p class="description">
+            JS 생태계를 이해하기 위해 인터넷의 정보를 모으고 있습니다. 이 곳에는 생각을 정리하기 위해 글귀를 모으고 있습니다.
+          </p>
+          <div class="button-group">
+            <LinkButton href="/posts" variant="primary">
+              글 살펴보기
+              <Icon name="lucide:arrow-right" />
+            </LinkButton>
+            <LinkButton href="/about" variant="secondary">
+              About.
+            </LinkButton>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* Featured Posts Section */}
+  <section class="featured-posts-section">
+    <div class="section-header">
+      <div>
+        <h2 class="featured-title">블로그 글</h2>
+      </div>
+      <LinkButton href="/posts" variant="primary" class="view-all-button">
+        모두 살펴보기
+        <Icon name="lucide:arrow-right" />
+      </LinkButton>
+    </div>
+    <div class="posts-grid">
+      {
+        recentPosts.map((post) => (
+          <div class="post-card">
+            <a class="post-thumbnail" href={post.id}>
+              <img class="thumbnail-image" src={post.data.cover?.src} alt="">
+            </a>
+            <div class="post-content">
+              <div class="post-meta">
+                <span class="category">{post.data.title}</span>
+              </div>
+              <div class="post-info">
+                <h3 class="post-title">
+                  {post.data.title}
+                </h3>
+                <p class="post-description">
+                  {post.data.description}
+                </p>
+              </div>
+              <a class="post-link" href={post.id} ><span>읽기</span> <Icon name="lucide:arrow-right" /></a>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  {/* Newsletter Section */}
+  <section class="newsletter-section">
+    <div class="newsletter-container">
+      <div class="newsletter-content">
+        <h2 class="newsletter-title">뉴스레터도 살펴보세요.</h2>
+        <p class="newsletter-description">
+          가장 최신 프론트엔드 관련 정보를 정리해서 인사이트를 드리고 있습니다.
+        </p>
+        <p><span>(이메일 구독 방식은 아직 구현되지 않았습니다.)</span>&nbsp;&nbsp;<a href="https://ones-to-watch.ethansup.net/">클릭해서 이동하세요.</a></p>
+        <form class="newsletter-form">
+          <input
+            type="email"
+            placeholder="your-email@gmail.com"
+            class="email-input"
+            disabled
+          />
+          <button class="subscribe-button" disabled>구독하기</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+</StarlightPage>
