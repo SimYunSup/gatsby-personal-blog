@@ -1,10 +1,22 @@
 ---
 title: Vue에서 React로
+date: 2020-07-13T00:00:00
 lastUpdated: 2020-07-13T00:00:00
 description: 초보 개발자가 프레임워크를 Vue에서 React로 마이그레이션을 마친 후기 
 cover: '../images/koin-vue-to-react-migration-0.png'
 slug: '/blog/koin-vue-to-react-migration'
+hero:
+  image:
+    file: '../images/koin-vue-to-react-migration-0.png'
 ---
+import { Aside } from '@astrojs/starlight/components';
+import PackageVersion from '@components/PackageVersion.astro';
+
+<Aside type="caution">
+이 글은 2020년에 작성되었습니다. 아래 버전 기준으로 작성되었으며, 현재 상황과 맞지 않을 수 있습니다.
+<PackageVersion versions={[['react', '16.12'], ['vue', '2']]} />
+</Aside>
+
 # 들어가며
 
 동아리에서 만든 학생 커뮤니티 서비스 개발에 참가한지도 벌써 1년이 지났다. <del>시간은 참 빨리 가는 것같다.</del>  처음에 커뮤니티 어드민 페이지 개편(이라고 쓰고 퇴화라고 부른다)에 참가했을 때는 처음 개발하는 서비스에 걱정과 두려움을 느끼면서 개발을 시작했는데 홍보게시판 개발에 참여하고 React 마이그레이션, 테스트 작성까지 마치면서 자신감이 붙게 되었다. 테스트 작성을 끝내고 비는 기간동안 KOIN 서비스의 프레임워크를 Vue에서 React로 마이그레이션을 하면서 느낀점이나 배운점을 적고 공유해보려고 한다.

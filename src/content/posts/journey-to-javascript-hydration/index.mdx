@@ -1,12 +1,19 @@
 ---
-title: 개발자들의 SSR 최적화 여정
+title: '개발자들의 SSR 최적화 여정'
+date: 2022-07-11T00:00:00
 lastUpdated: 2022-07-11T00:00:00
 description: 자바스크립트 개발자들이 SSR 최적화를 위해 걸어온 여정을 가볍게 살펴본다.
 cover: '../images/journey-to-javascript-hydration-0.png'
 slug: '/blog/journey-to-javascript-hydration'
+hero:
+  image:
+    file: '../images/journey-to-javascript-hydration-0.png'
 ---
+import { Aside } from '@astrojs/starlight/components';
 
-> 해당 글은 [patterns.dev](https://www.patterns.dev/posts/#rendering-patterns)의 간략하게 정리한 버전 + 알파입니다. 자세한 내용은 위를 참조하세요 :)
+<Aside type="note">
+해당 글은 [patterns.dev](https://www.patterns.dev/react/client-side-rendering)의 간략하게 정리한 버전 + 알파입니다. 😀
+</Aside>
 
 ## 여행의 시작: React의 문제점
 
@@ -18,7 +25,9 @@ AJAX가 등장하면서 기존의 Classic Server Side Rendering(줄여서 Classi
     - React로 이루어진 페이지가 컨텐츠를 렌더링하기 걸리는 시간이 매우 길다. 컨텐츠를 렌더링까지의 과정을 정리해보면 HTML 파일 받음 - JS 파일 받음 - JS 코드 중 서버에서 JSON을 받아옴 - React 렌더링 - 실제 DOM에 렌더링이 되는데, 매우 길다.
     - 요즘 웹 페이지들이 모바일을 우선적으로 고려하는 것을 생각하면 매우 느리다.
     - 이와 같은 이유로 기타 데이터를 불러오는 시간까지 도달하기에 매우 긴 시간이 걸린다.
-    - ![https://www.youtube.com/watch?v=k-A2VfuUROg&feature=youtu.be](../images/journey-to-javascript-hydration-1.png)
+
+[![CSR일 경우의 렌더링 다이어그램(클릭 시 이동)](../images/journey-to-javascript-hydration-1.png)](https://www.youtube.com/watch?v=k-A2VfuUROg)
+
 2. **크롤러가 내용을 저장하지 못한다.**
     - 검색 엔진의 크롤러가 내용을 저장소에 저장할 정도(내용을 긁어올 수 있을 만큼)로 빠르게 렌더링 되지 않아서 CSR로 이루어진 웹 어플리케이션을 분석하는데 제한사항이 생긴다.
     - 크롤러가 내용을 저장하고 head에 있는 태그를 분석해서 색인을 생성하는 과정을 거쳐야 하는데 React의 경우에는 "JS 받아옴 - React 렌더링 - React-helmet을 통해 head 생성"을 거쳐야 하는데 크롤러가 이를 head를 생성할 때까지 기다리지 않을 가능성이 크다.

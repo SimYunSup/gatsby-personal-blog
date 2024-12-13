@@ -1,0 +1,45 @@
+---
+import { Icon } from 'astro-icon/components';
+import '@styles/components/PackageVersion.css';
+const TARGET_DEV = {
+  react: {
+    icon: 'devicon:react',
+    link: 'https://github.com/facebook/react',
+  },
+  vue: {
+    icon: 'simple-icons:vuedotjs',
+    link: 'https://github.com/vuejs/core',
+  },
+  jest: {
+    icon: 'simple-icons:jest',
+    link: 'https://github.com/jestjs/jest',
+  },
+  chrome: {
+    icon: 'simple-icons:googlechrome',
+    link: 'https://www.google.com/intl/ko/chrome/',
+  },
+  firefox: {
+    icon: 'simple-icons:firefoxbrowser',
+    link: 'https://www.mozilla.org/ko/firefox/new/',
+  },
+  dotnet: {
+    icon: 'simple-icons:dotnet',
+    link: 'https://dotnet.microsoft.com/',
+  }
+};
+
+type TargetName = keyof (typeof TARGET_DEV)
+
+interface Props {
+  versions: [TargetName, string][] 
+}
+---
+
+<div class="badge-wrapper">
+  {Astro.props.versions.map(([name, version]) => (
+    <a class="badge" href={TARGET_DEV[name].link}>
+      <Icon is:inline name={TARGET_DEV[name].icon} />
+      <span class="version">{version}</span>
+    </a>
+  ))}
+</div>

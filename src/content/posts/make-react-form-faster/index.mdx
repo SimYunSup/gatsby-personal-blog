@@ -1,11 +1,26 @@
 ---  
-title: React Form handling 최적화
-lastUpdated: 2022-09-20T00:00:00  
-description: React에서 Form을 공식문서 따라서 만들면 페이지가 느려진다. ref와 useImprativeHandle로 최적화해보자.
-canonical_url: false  
-cover: '../images/make-react-form-faster-0.png'  
+title: 'React Form handling 최적화'
+description: 'React에서 Form을 공식문서 따라서 만들면 페이지가 느려진다. ref와 useImprativeHandle로 최적화해보자.'
+date: 2022-09-20T00:00:00
+lastUpdated: 2022-09-20T00:00:00
 slug: '/blog/make-react-form-faster'
+cover: '../images/make-react-form-faster-0.png'
+hero:
+  image:
+    file: '../images/make-react-form-faster-0.png'
 ---
+import { Aside } from '@astrojs/starlight/components';
+import PackageVersion from '@components/PackageVersion.astro';
+
+<Aside type="caution">
+이 글은 2022년에 작성되었습니다. 아래 버전 기준으로 작성되었으며, 현재 상황과 맞지 않을 수 있습니다.
+<PackageVersion versions={[['react', '18.2']]} />
+</Aside>
+
+<Aside type="note">
+해당 글은 제어 컴포넌트와 비제어 컴포넌트의 이해를 위해 `react-hook-form`을 간단하게 만들어본 것이며, 실제 구현과 많이 다릅니다.
+</Aside>
+
 
 과거 회사에서 어떻게 폼의 렌더링을 최소화할까 고민하다가 나온 결과물을 과거에 정리해 놓지 않았었다. 그로 인해 폼을 간단하게 사용하는 곳에 예시를 들 코드가 없어서 어떻게 폼 렌더링을 최소화하는가에 대한 설명이 어려웠었다. 그러다 이번에 동아리에서 진행하는 코인 리코드 작업에서 업그레이드해서 다시 만들어보았다. 이는 해당 코드를 어떻게 만들었는지 설명하는 글이며, 미래의 나와 다른 사람들이 도움이 되었으면 한다.
 
@@ -123,8 +138,7 @@ const LoginPage = ({ initialValue }: LoginPageProps) => {
 
 이 문제를 해결하려면 제어 컴포넌트 안에서만 validate하고 외부에서 `onSubmit`할 때 `forwardRef`와 `useImprativeHandle`로 valid한지 값만 넘겨주는 방식을 사용하면 된다.
 
-
-```tsx
+```tsx {23-32}
 import React from 'react';
 import toast from 'any-toast-library';
 
@@ -146,6 +160,7 @@ const useLoginForm = () => {
   const formRef = React.useRef<LoginFormRef>({});
   const handleSubmitForm: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
+    // validate 로직을 추가했다.
     const isCurrentValidEntries = Object.entries(refCollection.current)
       .map((refValue): [string, string | true] => {
         if (!refValue[1].ref) return [refValue[0], '오류가 발생했습니다.'];
@@ -156,6 +171,7 @@ const useLoginForm = () => {
       });
     const invalidFormEntry = isCurrentValidEntries
       .find((entry): entry is [string, string] => entry[1] !== true);
+
     if (!invalidFormEntry) {
       toast.open('error', invalidFormEntry[1]);
     }
@@ -170,12 +186,13 @@ const useLoginForm = () => {
     handleSubmitForm,
   };
 };
+```
 
-// ...
-
+```tsx {5-10}
 const PasswordForm = React.forwardRef<CustomInputRef | null, PasswordFormProps>((props, ref) => {
   const [password, setPassword] = React.useState('');
   const [passwordConfirmValue, setPasswordConfirmValue] = React.useState('');
+  // useImperativeHandle를 통해 외부에서 ref로 접근할 수 있다.
   React.useImperativeHandle<CustomInputRef | null, CustomInputRef | null>(ref, () => {
     return {
       valid: validatePassword(password, passwordConfirmValue),
@@ -197,23 +214,10 @@ const PasswordForm = React.forwardRef<CustomInputRef | null, PasswordFormProps>(
       {validatePassword(password, passwordConfirmValue)}
     </>
   )
-})
-
-// ...
-
-const LoginPage = ({ initialValue }: LoginPageProps) => {
-  const { formRef, handleChangeForm } = useLoginForm();
-  return (
-    <form>
-      <input ref={(ref) => { formRef.current.id = ref; }} name="id" defaultValue={intitalValue.id} />
-      
-      <button type="submit">입력</button>
-    </form>
-  );
-};
+});
 ```
 
-위 LoginPage는 다음과 같이 동작한다
+LoginPage의 경우는 똑같기에 제외했다. 위 코드는 다음과 같이 동작한다.
 
 1. ID는 비제어 입력 요소(Uncontrolled Input)로서 DOM에게 상태 관리를 맡긴다.
 2. password와 password-confirm은 제어 컴포넌트로 React에서 상태를 관리한다.
@@ -231,7 +235,6 @@ const LoginPage = ({ initialValue }: LoginPageProps) => {
 
 
 ```tsx
-// https://github.com/BCSDLab/KOIN_WEB_RECODE/blob/develop/src/pages/Auth/SignupPage/index.tsx#L51-L94
 
 interface FormType {
   [key: string]: {
@@ -324,8 +327,8 @@ validFunction을 통해 submit할 때 validate하는 기능과 함께 리팩토�
 
 ## 이걸 위해 라이브러리가 있네요.
 
-이것을 위해 만들어진 라이브러리가 있다. 바로 [react-hook-form](https://react-hook-form.com/)이다.
+이것을 위해 만들어진 라이브러리가 있다. 바로 [`react-hook-form`](https://react-hook-form.com/)이다(`react-hook-form`의 경우에는 `useRef`와 리렌더링 트리거를 위한 `useState` 기반으로 만들어졌다).
 
-react-hook-form을 쓰게 되면 이러한 구현 없이 빠르게 비제어 컴포넌트로 감싸는 작업과 함께 성능 최적화를 할 수 있다.
+`react-hook-form`을 쓰게 되면 이러한 구현 없이 빠르게 비제어 컴포넌트로 감싸는 작업과 함께 성능 최적화를 할 수 있다.
 
-처음부터 react-hook-form을 따로 쓰지 않은 이유는 `forwardRef`와 `useImprativeHandle`의 사용방법, 그리고 react-hook-form이 어떻게 동작하는지(모든 동작과정을 구현하지는 않았지만) 알고 가면 좋겠다라는 점에서 만들었다.
+처음부터 `react-hook-form`을 따로 쓰지 않은 이유는 `forwardRef`와 `useImprativeHandle`의 사용방법을 알고 가면 좋겠다라는 점에서 만들었다.

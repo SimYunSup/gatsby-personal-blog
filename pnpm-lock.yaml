@@ -32,6 +32,12 @@ importers:
         specifier: ^0.32.5
         version: 0.32.6
     devDependencies:
+      '@iconify-json/devicon':
+        specifier: ^1.2.8
+        version: 1.2.8
+      '@iconify-json/simple-icons':
+        specifier: ^1.2.15
+        version: 1.2.15
       astro-icon:
         specifier: ^1.1.4
         version: 1.1.4
@@ -409,8 +415,14 @@ packages:
   '@floating-ui/utils@0.2.8':
     resolution: {integrity: sha512-kym7SodPp8/wloecOpcmSnWJsK7M0E5Wg8UcFA+uO4B9s5d0ywXOEro/8HM9x0rW+TljRzul/14UYz3TleT3ig==}
 
+  '@iconify-json/devicon@1.2.8':
+    resolution: {integrity: sha512-bFR+zEhb5Drz2XSYCPn7Sjbfq3ld6arbhy8QjdP2MxOjOdY9VcDi1lPTt88/cPqPHcI/xeDh51RcwfjvxLyJOQ==}
+
   '@iconify-json/lucide@1.2.18':
     resolution: {integrity: sha512-SFBoHBSULntem84iWxGM9NzlP6QY/dwjxC5t4c1lC7+xq31Fous8JkppoJih0/ICJ3CsbppRZeb11y3iLcwwug==}
+
+  '@iconify-json/simple-icons@1.2.15':
+    resolution: {integrity: sha512-4vxMQwkjsbjVIVGsPjKBnLMqAXu4wSlHmeN35KaJLK0UJNUj/ef6ES5c4bT/U4bSZjD2oZqOjOWTPD+HCrSUkg==}
 
   '@iconify/tools@4.0.7':
     resolution: {integrity: sha512-zOJxKIfZn96ZRGGvIWzDRLD9vb2CsxjcLuM+QIdvwWbv6SWhm49gECzUnd4d2P0sq9sfodT7yCNobWK8nvavxQ==}
@@ -2598,7 +2610,15 @@ snapshots:
 
   '@floating-ui/utils@0.2.8': {}
 
+  '@iconify-json/devicon@1.2.8':
+    dependencies:
+      '@iconify/types': 2.0.0
+
   '@iconify-json/lucide@1.2.18':
+    dependencies:
+      '@iconify/types': 2.0.0
+
+  '@iconify-json/simple-icons@1.2.15':
     dependencies:
       '@iconify/types': 2.0.0
 

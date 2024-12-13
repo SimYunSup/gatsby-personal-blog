@@ -4,3 +4,19 @@
   justify-content: center;
   border-radius: 8px;
 }
+.rehype-figure {
+  display: flex;
+  flex-direction: column;
+
+  & > img {
+    margin: 0 auto;
+  }
+
+  & > figcaption {
+    text-align: center;
+
+    body .sl-markdown-content & {
+      margin-top: 0.25rem;
+    }
+  }
+}
