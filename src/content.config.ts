@@ -3,8 +3,8 @@ import { glob } from 'astro/loaders';
 import { docsSchema } from '@astrojs/starlight/schema';
 
 export const collections = {
-	docs: defineCollection({
-    loader: glob({ pattern: ['**/*.md', '**/*.mdx'], base: "./src/content/posts" }),
+  docs: defineCollection({
+    loader: glob({ pattern: ['**/*.md', '**/*.mdx'], base: './src/content/posts' }),
     schema: docsSchema({
       extend: ({ image }) => {
         return z.object({
@@ -13,6 +13,6 @@ export const collections = {
           cover: image().optional(),
         });
       },
-    })
+    }),
   }),
 };

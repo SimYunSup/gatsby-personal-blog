@@ -68,7 +68,7 @@ const recentPosts = posts
       <div>
         <h2 class="featured-title">블로그 글</h2>
       </div>
-      <LinkButton href="/posts" variant="primary" class="view-all-button">
+      <LinkButton class="view-all-button" href="/posts" variant="primary">
         모두 살펴보기
         <Icon name="lucide:arrow-right" />
       </LinkButton>
@@ -78,7 +78,7 @@ const recentPosts = posts
         recentPosts.map((post) => (
           <div class="post-card">
             <a class="post-thumbnail" href={post.id}>
-              <img class="thumbnail-image" src={post.data.cover?.src} alt="">
+              <img alt="" class="thumbnail-image" src={post.data.cover?.src}>
             </a>
             <div class="post-content">
               <div class="post-meta">
@@ -112,10 +112,7 @@ const recentPosts = posts
         </p>
         <form class="newsletter-form">
           <input
-            type="email"
-            placeholder="your-email@gmail.com"
-            class="email-input"
-            disabled
+            class="email-input"             disabled             placeholder="your-email@gmail.com"             type="email"
           />
           <button class="subscribe-button" disabled>구독하기</button>
         </form>

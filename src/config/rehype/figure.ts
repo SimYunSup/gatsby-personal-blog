@@ -1,58 +1,56 @@
-import type { Element } from "@astrojs/starlight/expressive-code/hast";
+import type { Element, Parent } from '@astrojs/starlight/expressive-code/hast';
 
 import { visit } from 'unist-util-visit';
 import { h } from 'hastscript';
 
+export function RehypeFigurePlugin(options: Record<string, unknown>) {
+  return (tree: Parent) => {
+    // unwrap the images inside the paragraph
+    visit(tree, { tagName: 'p' }, (node, index, parent) => {
+      if (parent === undefined || index === undefined || !hasOnlyImages(node)) {
+        return;
+      }
 
-export function RehypeFigurePlugin(options: Record<string, any>) {
-	return (tree: any) => {
-		// unwrap the images inside the paragraph
-		visit(tree, { tagName: "p" }, (node, index, parent) => {
-			if (!hasOnlyImages(node)) {
-				return;
-			}
+      parent.children.splice(index, 1, ...node.children);
 
-			parent.children.splice(index, 1, ...node.children);
+      return index;
+    });
 
-			return index;
-		});
+    // wrap images in figure
+    visit(tree, node => isImageWithAlt(node as Element), (node, index, parent) => {
+      if (!parent || isImageWithCaption(parent as Element) || isImageLink(parent)) {
+        return;
+      }
+      const typedNode = node as Element;
 
-		// wrap images in figure
-		visit(tree, (node) => isImageWithAlt(node as Element), (node, index, parent) => {
-			if (isImageWithCaption(parent) || isImageLink(parent)) {
-				return;
-			}
+      const figure = createFigure(typedNode, options);
 
-			const figure = createFigure(node, options);
-
-			node.tagName = figure.tagName;
-			node.children = figure.children;
-			node.properties = figure.properties;
-		});
-	};
+      typedNode.tagName = figure.tagName;
+      typedNode.children = figure.children;
+      typedNode.properties = figure.properties;
+    });
+  };
 }
 
 function hasOnlyImages({ children }: Element) {
-	return children.every((child) => child.type === "element" && (child.tagName === "img"));
+  return children.every(child => child.type === 'element' && (child.tagName === 'img'));
 }
 
 function isImageWithAlt({ tagName, properties }: Element) {
-	return tagName === "img" && Boolean(properties.alt) && Boolean(properties.src);
+  return tagName === 'img' && Boolean(properties.alt) && Boolean(properties.src);
 }
 
 function isImageWithCaption({ tagName, children }: Element) {
-	return tagName === "figure" && children.some((child) => child.type === "element" && child.tagName === "figcaption");
+  return tagName === 'figure' && children.some(child => child.type === 'element' && child.tagName === 'figcaption');
 }
 
-function isImageLink({ tagName }: Record<string, any>) {
-	return tagName === "a";
+function isImageLink({ tagName }: Record<string, unknown>) {
+  return tagName === 'a';
 }
 
-function createFigure({ properties }: Element, options: { className?: string }) {
-	// const props = options.className ? { class: options.className } : {};
-	// console.log(props);
-  return h("figure", { class: "rehype-figure" }, [
-		h("img", { ...properties }),
-		h("figcaption", String(properties.alt))
-	]);
+function createFigure({ properties }: Element) {
+  return h('figure', { class: 'rehype-figure' }, [
+    h('img', { ...properties }),
+    h('figcaption', String(properties.alt)),
+  ]);
 }
