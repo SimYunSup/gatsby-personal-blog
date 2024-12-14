@@ -54,5 +54,11 @@ export default defineConfig({
     rehypePlugins: [
       RehypeFigurePlugin,
     ],
+    shikiConfig: {
+      themes: {
+        light: 'github-light',
+        dark: 'github-dark',
+      }
+    }
   },
 });

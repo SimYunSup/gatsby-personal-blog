@@ -20,6 +20,9 @@
       fill: var(--sl-color-gray-2) !important;
     }
   }
+  body .badge-wrapper & {
+    color: #FFFFFF;
+  }
 
   &:hover {
     background-color: var(--sl-color-gray-5);

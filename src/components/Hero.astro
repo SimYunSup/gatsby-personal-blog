@@ -1,4 +1,5 @@
 ---
+import type { Props } from '@astrojs/starlight/props';
 import { Image } from 'astro:assets';
 import { LinkButton } from '@astrojs/starlight/components';
 
@@ -42,7 +43,11 @@ if (image) {
 			{tagline && <div class="tagline" set:html={tagline} />}
 			<div>
 				{(new Date(date)).toLocaleDateString(lang, { dateStyle: 'medium', timeZone: 'UTC' })}
-				{isEdited && <span>(수정 {data.lastUpdated.toLocaleDateString(lang, { dateStyle: 'medium', timeZone: 'UTC' })})</span>}
+				{(isEdited && data.lastUpdated instanceof Date) && (
+					<span>
+						(수정 {data.lastUpdated.toLocaleDateString(lang, { dateStyle: 'medium', timeZone: 'UTC' })})
+						</span>
+				)}
 			</div>
 		</div>
 

@@ -45,7 +45,7 @@ React 공식문서의 튜토리얼에서도 느끼고, Vue에서 React에서 마
 
 세부적으로 들어가면 기능과 코드를 짜는 스타일도 모두 다르다.  간단한 예제와 함께 차이점을 알아보도록 하자. 밑의 코드는 사용자 정의 input 컴포넌트와 그의 결과를 보여주는 화면을 만든 것이다.
 
-```vue{codeTitle: "CustomInput.vue"}
+```vue
 <template>
   <input
     :value="message"
@@ -68,7 +68,7 @@ export default {
 ```
 
 
-```vue{codeTitle: "Home.vue"}
+```vue
 <template>
   <div>
     <custom-input
@@ -96,7 +96,7 @@ export default {
 ```
 _간단하게  Vue로 작성한 input 컴포넌트와 보여주는 화면_
 
-```jsx{codeTitle: "CustomInput.js"}
+```jsx
 import React from 'react';
 
 export default function CustomInput({
@@ -111,7 +111,7 @@ export default function CustomInput({
 }
 ```
 
-```jsx{codeTitle:"Home.js"}
+```jsx
 import React, {useState} from 'react';
 import CustomInput from '../components/CustomInput';
 
@@ -137,7 +137,7 @@ Vue에서는 `props`와 `event`를 이용한 양방향 데이터 바인딩을 �
 ![`props` and event](../../../assets/images/koin-vue-to-react-migration-2.png)
 _Vue 공식 가이드에 있는 컴포넌트간 통신 모형_
 
-```vue{codeTitle: "CustomInput.vue"}{10-12,15}
+```vue {10-12,15}
 <template>
   <input
     :value="message"
@@ -167,7 +167,7 @@ React는 `props`로만 통신하는 단방향 데이터 바인딩을 한다. Rea
 ![React 컴포넌트 간 통신모형](../../../assets/images/koin-vue-to-react-migration-4.png)
 _굳이 표현하자면 이런 모형_
 
-```jsx{codeTitle: "CustomInput.js"}{4-5,9-10}
+```jsx {4-5,9-10}
 import React from 'react';
 
 export default function CustomInput({

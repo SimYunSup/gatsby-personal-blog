@@ -165,30 +165,33 @@ namespace PUSH_SERVER_WEB.Services
 }
 ```
 
-### 이외에도...
+## 이외에도...
 
-- 프론트엔드에 존재하는 MSW같이 backend API를 mocking하여 backend API가 만들어지기 전까지 HttpClient를 mocking하는 것 또한 존재한다.
-  - 자세한 것은 [다음 구현](https://jasonwatmore.com/post/2020/08/13/blazor-webassembly-jwt-authentication-example-tutorial#fake-backend-handler-cs)을 참고하자.
-- EditForm 컴포넌트로 form 데이터의 유효성을 검사할 수 있다.
-  - Model을 지정할 수 있는데 이때 `Required`, `StringLength()`, `Range`등 여러가지의 특성을 활용해 유효성 검사를 쉽게 할 수 있다.
-- 개발하다보면 JS를 호출해야 할 상황이 올 수 있다. 이때 TypeScript를 사용하여 Type 검사를 진행할 수도 있다.
-  - 이것은 [다음 컨퍼런스 발표](https://forum.dotnetdev.kr/t/blazor-webassembly-webpack-sass-typescript-net-conf-2022-x-seoul-replay/3087)를 바탕으로 세팅을 하면 된다.
-  - 하지만 이 컨퍼런스와 다른 부분은 `index.js`를 직접 import 하지말고 JSRuntime에서 [JS 파일를 호출하는 방식](https://learn.microsoft.com/ko-kr/aspnet/core/blazor/javascript-interoperability/call-javascript-from-dotnet?view=aspnetcore-6.0#javascript-isolation-in-javascript-modules)을 사용하는 것이 전역 네임스페이스를 오염시키지 않는다는 점에서 좋다.
-  - 이를 위해서 webpack 설정에 다음 구문을 추가해야 한다.
-  ```js
-  module.exports = {
-    // ...
-    output: {
-        path: path.resolve(__dirname, "wwwroot/build"),
-        filename: "index.js",
-        libraryTarget: 'umd',
-        library: '라이브러리 이름',
-    },
-    // ...
-  }
-  ```
-  - 그리고 C#에서는 다음과 같이 호출해야 한다.
-  ```cs
+프론트엔드에 존재하는 MSW같이 backend API를 mocking하여 backend API가 만들어지기 전까지 HttpClient를 mocking하는 것 또한 존재한다. 자세한 것은 [다음 구현](https://jasonwatmore.com/post/2020/08/13/blazor-webassembly-jwt-authentication-example-tutorial#fake-backend-handler-cs)을 참고하자.
+
+EditForm 컴포넌트로 form 데이터의 유효성을 검사할 수 있다. Model을 지정할 수 있는데 이때 `Required`, `StringLength()`, `Range`등 여러가지의 특성을 활용해 유효성 검사를 쉽게 할 수 있다.
+
+개발하다보면 JS를 호출해야 할 상황이 올 수 있다. 이때 TypeScript를 사용하여 Type 검사를 진행할 수도 있다.
+
+이것은 [다음 컨퍼런스 발표](https://forum.dotnetdev.kr/t/blazor-webassembly-webpack-sass-typescript-net-conf-2022-x-seoul-replay/3087)를 바탕으로 세팅을 하면 된다. 하지만 이 컨퍼런스와 다른 부분은 `index.js`를 직접 import 하지말고 JSRuntime에서 [JS 파일를 호출하는 방식](https://learn.microsoft.com/ko-kr/aspnet/core/blazor/javascript-interoperability/call-javascript-from-dotnet?view=aspnetcore-6.0#javascript-isolation-in-javascript-modules)을 사용하는 것이 전역 네임스페이스를 오염시키지 않는다는 점에서 좋다.
+
+이를 위해서 webpack 설정에 다음 구문을 추가해야 한다.
+
+```js
+module.exports = {
+  // ...
+  output: {
+    path: path.resolve(__dirname, "wwwroot/build"),
+    filename: "index.js",
+    libraryTarget: 'umd',
+    library: '라이브러리 이름',
+  },
+  // ...
+}
+```
+
+그리고 C#에서는 다음과 같이 호출해야 한다.
+```cs
   @code {
     private IJSObjectReference? module;
 
@@ -205,4 +208,4 @@ namespace PUSH_SERVER_WEB.Services
         module is not null ? 
             await module.InvokeAsync<string>("showPrompt", message) : null;
 }
-  ```
+```
