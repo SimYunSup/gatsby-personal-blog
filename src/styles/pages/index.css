@@ -15,7 +15,7 @@
   left: 50%;
   transform: translate(-50%, 0);
   clip-path: polygon(0% 100%, 63% 100%, 70% 85%, 100% 85%, 100% 0%, 0% 0%);
-  background-color: #1a237e;
+  background-color: var(--color-point);
 }
 .hero-container {
   position: relative;
@@ -71,11 +71,12 @@
   font-weight: bold;
   .sl-markdown-content & {
     margin-top: 20px;
+    color: var(--sl-color-black);
   }
 }
 
 .description {
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--sl-color-black);
   .sl-markdown-content & {
     margin-top: 0;
   }
@@ -86,6 +87,10 @@
   gap: 1rem;
 }
 
+.hero-ghost-button.secondary {
+  color: var(--sl-color-black);
+  border-color: var(--sl-color-black);
+}
 
 /* Featured Posts Section */
 .featured-posts-section {
@@ -180,7 +185,7 @@ body .sl-markdown-content .featured-title {
 }
 .category {
   background: rgba(218, 255, 15, 0.2);
-  color: #daff0f;
+  color: var(--sl-color-accent-high);
   font-size: .75rem;
   padding: 4px 12px;
   border-radius: 9999px;
@@ -190,8 +195,8 @@ body .sl-markdown-content .featured-title {
 .newsletter-section {
   position: relative;
   border-radius: 20px;
-  background: #1a237e;
-  color: white;
+  background-color: var(--color-point);
+  color: var(--sl-color-black);
   padding: 80px 20px;
   text-align: center;
 }
@@ -199,12 +204,21 @@ body .sl-markdown-content .featured-title {
 .newsletter-title {
   font-size: 2rem;
   font-weight: bold;
+  body .sl-markdown-content & {
+    color: var(--sl-color-black);
+  }
 }
 
 .newsletter-description {
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--sl-color-black);
   body .sl-markdown-content & {
     margin-top: 20px;
+  }
+  & a {
+    color: var(--sl-color-black);
+    &:hover {
+      color: var(--sl-color-gray-5);
+    }
   }
 }
 
@@ -218,7 +232,7 @@ body .sl-markdown-content .featured-title {
 .email-input {
   flex: 1;
   background: rgba(255, 255, 255, 0.1);
-  color: white;
+  color: var(--sl-color-black);
   padding: 8px;
   border: none;
   border-radius: 8px;
@@ -226,6 +240,7 @@ body .sl-markdown-content .featured-title {
 
 .subscribe-button {
   background: #daff0f;
+  color: #2e3700;
   padding: 8px 12px;
   border: none;
   border-radius: 8px;

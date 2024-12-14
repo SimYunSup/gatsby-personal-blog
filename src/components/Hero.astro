@@ -80,9 +80,12 @@ if (image) {
 		gap: 1rem;
 		padding-bottom: 1rem;
 	}
-
+	:root[data-theme="light"] .hero > div > img {
+		border: 1px solid var(--sl-color-white);
+	}
 	.hero > div > img,
 	.hero > .hero-html {
+		border-radius: 8px;
 		object-fit: contain;
 		width: min(70%, 500px);
 		height: auto;

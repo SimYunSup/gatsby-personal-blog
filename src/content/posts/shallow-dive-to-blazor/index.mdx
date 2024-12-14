@@ -4,11 +4,11 @@ date: 2022-10-29T00:00:00
 lastUpdated: 2022-10-29T00:00:00
 description: C#기반 SPA 프레임워크인 Blazor WASM을 한 번 사용해보고 장단점을 알아보자.
 canonical_url: false
-cover: '../images/shallow-dive-to-blazor-0.png'
+cover: '../../../assets/images/shallow-dive-to-blazor-0.png'
 slug: '/blog/shallow-dive-to-blazor'
 hero:
   image:
-    file: '../images/shallow-dive-to-blazor-0.png'
+    file: '../../../assets/images/shallow-dive-to-blazor-0.png'
 ---
 
 import { Aside } from '@astrojs/starlight/components';
@@ -31,7 +31,7 @@ Blazor의 [튜토리얼](https://learn.microsoft.com/ko-kr/aspnet/core/blazor)�
 
 때문에 [LCP](https://web.dev/lcp/)까지 시간이 오래걸린다. 현재 Hydration을 개선하는 방식으로 JS 생태계가 발전해나아가고 있는데 런타임 WASM을 다운받는 것은 큰 단점이 될 수 있다. 물론 큰 JS를 삽입하지만 않는다면 속도는 양호하다.
 
-![기본 Blazor 프로젝트의 속도](../images/shallow-dive-to-blazor-1.png)
+![기본 Blazor 프로젝트의 속도](../../../assets/images/shallow-dive-to-blazor-1.png)
 
 하지만 TypeScript같은 컴파일타임에 타입을 검사하는 것 뿐만아니라 런타임에도 타입을 검사하기 때문에 타입 검사가 더 강력하다. C#의 문법을 아는 사람이라면 더욱 빠르게 적응할 수 있다.
 

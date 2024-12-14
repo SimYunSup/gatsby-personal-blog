@@ -3,11 +3,11 @@ title: '개발자들의 SSR 최적화 여정'
 date: 2022-07-11T00:00:00
 lastUpdated: 2022-07-11T00:00:00
 description: 자바스크립트 개발자들이 SSR 최적화를 위해 걸어온 여정을 가볍게 살펴본다.
-cover: '../images/journey-to-javascript-hydration-0.png'
+cover: '../../../assets/images/journey-to-javascript-hydration-0.png'
 slug: '/blog/journey-to-javascript-hydration'
 hero:
   image:
-    file: '../images/journey-to-javascript-hydration-0.png'
+    file: '../../../assets/images/journey-to-javascript-hydration-0.png'
 ---
 import { Aside } from '@astrojs/starlight/components';
 
@@ -26,7 +26,7 @@ AJAX가 등장하면서 기존의 Classic Server Side Rendering(줄여서 Classi
     - 요즘 웹 페이지들이 모바일을 우선적으로 고려하는 것을 생각하면 매우 느리다.
     - 이와 같은 이유로 기타 데이터를 불러오는 시간까지 도달하기에 매우 긴 시간이 걸린다.
 
-[![CSR일 경우의 렌더링 다이어그램(클릭 시 이동)](../images/journey-to-javascript-hydration-1.png)](https://www.youtube.com/watch?v=k-A2VfuUROg)
+[![CSR일 경우의 렌더링 다이어그램](../../../assets/images/journey-to-javascript-hydration-1.png)](https://www.youtube.com/watch?v=k-A2VfuUROg)
 
 2. **크롤러가 내용을 저장하지 못한다.**
     - 검색 엔진의 크롤러가 내용을 저장소에 저장할 정도(내용을 긁어올 수 있을 만큼)로 빠르게 렌더링 되지 않아서 CSR로 이루어진 웹 어플리케이션을 분석하는데 제한사항이 생긴다.
@@ -69,7 +69,7 @@ SSG의 단점을 보완하여 속도는 SSG의 장점인 빠른 속도(서버 �
 
 SSR은 상호작용할 수 없는 HTML을 만들어 주고 JS를 전달해 hydration을 전체 어플리케이션에 한다. Progressive hydration은 전체 어플리케이션에 hydration을 하는 것을 오버헤드라고 생각하고 필요하지 않은 부분은 나중에 hydration하는 방식으로 SSR의 느린 속도를 해결하고자 한다.
 
-![Progressive hydration](../images/journey-to-javascript-hydration-2.png)
+![Progressive hydration](../../../assets/images/journey-to-javascript-hydration-2.png)
 
 Progressive hydration의 기본은 어플리케이션을 청크로 나누어 성능을 향상하는 것이다. 그래서 전체 UX에 어떤 영향을 미칠지 고려해야 한다. patterns.dev에서는 Progressive hydration을 하려면 아래 사항을 충족해야 한다고 말한다.
 
@@ -93,7 +93,7 @@ Progressive hydration은 코드를 분할할 수 있어 번들 크기 감소에 
 
 Streaming SSR은 HTML을 청크 단위로 보내 브라우저가 점진적으로 렌더링할 수 있도록 하는 것이다. HTML 청크를 클라이언트에 스트리밍하여 HTML의 바이트를 더 빨리 수신할 수 있게 하는 것이다. 
 
-![Streaming SSR](../images/journey-to-javascript-hydration-3.png)
+![Streaming SSR](../../../assets/images/journey-to-javascript-hydration-3.png)
 
 스트리밍을 통해 빨리 수신하게 되면 응답에 대해 일찍 구문 분석하고 렌더링하게 된다. 서버 사이드 렌더링을 하므로 SEO 지원도 된다는 장점이 있다. 하지만 역시 단점도 있다. styled-components같은 CSS-in-JS 프레임워크들은 렌더링하는 동안 style 태그에 요소를 추가하기 때문에 Streaming SSR을 구현하는데 [추가 작업](https://medium.com/styled-components/v3-1-0-such-perf-wow-many-streams-c45c434dbd03#:~:text=Streaming%20server%2Dside%20rendering%20was,handle%20back%2Dpressure%20more%20easily.)을 해주어야 한다.
 
@@ -113,7 +113,7 @@ Selective hydration은 Streaming SSR과 Progressive hydration에서 작성한 Re
 
 Island Architecture는 섬이라는 개념을 도입한다. 먼저 렌더링하거나 수화할 필요가 없는 정적 HTML을 놓는다. 그리고 상호작용 하는 부분(이를 섬이라고 한다.)만 수화하도록 한다. 그리고 섬은 모두 독립적으로 작동하여 마이크로 프론트엔드와 유사하게 작동한다.
 
-![Islands Architecture](../images/journey-to-javascript-hydration-5.png)
+![Islands Architecture](../../../assets/images/journey-to-javascript-hydration-5.png)
 
 [Astro](https://astro.build/)와 [Marko](https://markojs.com/)가 Island Architecture를 지원한다.
 

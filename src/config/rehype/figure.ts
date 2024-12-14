@@ -1,35 +1,58 @@
+import type { Element } from "@astrojs/starlight/expressive-code/hast";
+
 import { visit } from 'unist-util-visit';
-//@ts-expect-error
 import { h } from 'hastscript';
 
-export function RehypeFigurePlugin(option: Record<string, any>) {
-  const className = (option && option.className) || "rehype-figure"
 
-  function buildFigure({ properties }: any) {
-    const figure = h("figure", { class: className }, [
-      h("img", { ...properties }),
-      properties.alt && properties.alt.trim().length > 0
-        ? h("figcaption", properties.alt)
-        : "",
-    ])
-    return figure
-  }
+export function RehypeFigurePlugin(options: Record<string, any>) {
+	return (tree: any) => {
+		// unwrap the images inside the paragraph
+		visit(tree, { tagName: "p" }, (node, index, parent) => {
+			if (!hasOnlyImages(node)) {
+				return;
+			}
 
-  return function (tree: any) {
-    visit(tree, { tagName: "p" }, (node, index) => {
-      const images = node.children
-        .filter((child: any) => child.tagName === "img")
-        .map((img: any) => buildFigure(img))
-      if (images.length === 0) return
-      console.log(JSON.stringify(images));
-      tree.children[index!] =
-        images.length === 1
-          ? images[0]
-          : h(
-              "div",
-              { class: `${className}-container` },
-              images
-            )
-    })
-  }
+			parent.children.splice(index, 1, ...node.children);
+
+			return index;
+		});
+
+		// wrap images in figure
+		visit(tree, (node) => isImageWithAlt(node as Element), (node, index, parent) => {
+			if (isImageWithCaption(parent) || isImageLink(parent)) {
+				return;
+			}
+
+			const figure = createFigure(node, options);
+
+			node.tagName = figure.tagName;
+			node.children = figure.children;
+			node.properties = figure.properties;
+		});
+	};
+}
+
+function hasOnlyImages({ children }: Element) {
+	return children.every((child) => child.type === "element" && (child.tagName === "img"));
+}
+
+function isImageWithAlt({ tagName, properties }: Element) {
+	return tagName === "img" && Boolean(properties.alt) && Boolean(properties.src);
+}
+
+function isImageWithCaption({ tagName, children }: Element) {
+	return tagName === "figure" && children.some((child) => child.type === "element" && child.tagName === "figcaption");
+}
+
+function isImageLink({ tagName }: Record<string, any>) {
+	return tagName === "a";
+}
+
+function createFigure({ properties }: Element, options: { className?: string }) {
+	// const props = options.className ? { class: options.className } : {};
+	// console.log(props);
+  return h("figure", { class: "rehype-figure" }, [
+		h("img", { ...properties }),
+		h("figcaption", String(properties.alt))
+	]);
 }
