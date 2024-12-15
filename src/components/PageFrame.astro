@@ -3,7 +3,14 @@
   <slot name="sidebar" />
 	<div class="main-frame"><slot /></div>
 </div>
+<script type="text/partytown" src="https://www.googletagmanager.com/gtag/js?id=G-G3JPBKY14D"></script>
+<script type="text/partytown">
+	window.dataLayer = window.dataLayer || [];
+	window.gtag = function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
 
+	gtag('config', 'G-G3JPBKY14D');
+</script>
 <style>
 	.page {
 		flex-direction: column;

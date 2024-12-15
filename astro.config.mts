@@ -6,6 +6,8 @@ import icon from 'astro-icon';
 
 import { RehypeFigurePlugin } from './src/config/rehype/figure';
 
+import partytown from '@astrojs/partytown';
+
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // https://astro.build/config
@@ -44,6 +46,13 @@ export default defineConfig({
       },
     }),
     icon(),
+    partytown({
+      config: {
+        forward: [
+          'dataLayer.push',
+        ],
+      },
+    }),
   ],
   vite: {
     resolve: {

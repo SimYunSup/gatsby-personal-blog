@@ -13,6 +13,7 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/partytown": "^2.1.2",
     "@astrojs/starlight": "^0.29.3",
     "@iconify-json/lucide": "^1.2.18",
     "@shoelace-style/shoelace": "^2.19.1",
