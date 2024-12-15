@@ -11,6 +11,7 @@ export const collections = {
           // Add a field that must resolve to a local image.
           date: z.date().optional(),
           cover: image().optional(),
+          tag: z.string().optional(),
           lang: z.string().default('ko'),
         });
       },

@@ -54,7 +54,7 @@ const frontmatter = {
         date={post.data.date}
         title={post.data.title}
         image={post.data.cover?.src}
-        tag="게시물"
+        tag={post.data.tag ?? 'Etc'}
         to={post.id}
       />
     ))}

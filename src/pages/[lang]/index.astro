@@ -53,8 +53,12 @@ const recentPosts = posts
               글 살펴보기
               <Icon name="lucide:arrow-right" />
             </LinkButton>
-            <LinkButton class="hero-ghost-button" href="/about" variant="secondary">
-              About.
+            <LinkButton
+              class="hero-ghost-button"
+              href="#"
+              variant="secondary"
+            >
+              About.(추가 예정)
             </LinkButton>
           </div>
         </div>
@@ -84,7 +88,7 @@ const recentPosts = posts
             date={post.data.date}
             title={post.data.title}
             image={post.data.cover?.src}
-            tag="게시물"
+            tag={post.data.tag ?? 'Etc'}
             to={post.id}
           />
         ))

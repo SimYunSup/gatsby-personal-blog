@@ -18,10 +18,10 @@ export default defineConfig({
       },
       description: 'blog to storing my thinking',
       logo: {
-        light: './src/assets/logo/favicon.svg',
-        dark: './src/assets/logo/favicon-dark.svg',
+        light: './src/assets/logo/favicon-dark.svg',
+        dark: './src/assets/logo/favicon.svg',
       },
-      // favicon: '/public/favicon-',
+      favicon: './src/assets/logo/favicon.svg',
       social: {
         github: 'https://github.com/SimYunSup',
         linkedin: 'https://www.linkedin.com/in/pedogunu',

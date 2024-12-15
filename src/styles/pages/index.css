@@ -35,7 +35,7 @@
   }
 }
 .hero-content {
-  padding-top: 20px;
+  padding: 20px 20px 0;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -106,8 +106,10 @@
   width: 100%;
   gap: 1rem;
   justify-content: center;
-  @media (min-width: 800px) {
-    margin-top: 10px;
+  .sl-markdown-content & {
+    @media (min-width: 800px) {
+      margin-top: 20px;
+    }
   }
   & .sl-link-button {
     padding: 8px 16px;
@@ -128,7 +130,7 @@
 
 /* Featured Posts Section */
 .featured-posts-section {
-  padding: 6rem 1rem;
+  padding: 100px 0;
 }
 
 .section-header {
