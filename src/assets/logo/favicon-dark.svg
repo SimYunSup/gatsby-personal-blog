@@ -1,0 +1,72 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="100%" viewBox="0 0 192 192" xml:space="preserve">
+<path fill="#1E2189" stroke="none" 
+	d="
+	M50,137
+	L163,137
+	L163,176
+	L27,176
+	C38,153 41,147 44,141
+	C45,138 47,137 50,137
+z"/>
+<path fill="#EDFF4D" opacity="1.000000" stroke="none" 
+	d="
+	M113,58
+	L30,92 
+	L30,16
+	L113,40 
+z"/>
+<path fill="#E0E6AD" opacity="1.000000" stroke="none" 
+	d="
+	M157,137 
+	L108,137
+	C109.006737,117.218826 110.033516,96.892952 111.101372,76.569229 
+	C111.283157,73.109383 111.641037,69.658783 112,65
+	L153,65 
+	C153.969315,81.831024 154.936081,98.351204 155.872711,114.873093 
+	L157,137
+z"/>
+<path fill="#9BB584" opacity="1.000000" stroke="none" 
+	d="
+	M113,33 
+	C113,10 150,10 150,33
+	L113,33 
+z"/>
+<path fill="#0c133a" opacity="1.000000" stroke="none" 
+	d="
+	M113,33
+	L153,33
+	C159,33 159,40 153,40
+	L113, 40
+	C107,40 107,33 113,33
+z"/>
+<path fill="#0c133a" opacity="1.000000" stroke="none" 
+	d="
+	M113,59
+	L153,59
+	C159,59 159,66 153,66
+	L113,66
+	C107,66 107,59 113,59
+z"/>
+<path fill="#BDBDBB" opacity="1.000000" stroke="none" 
+	d="
+	M151,59 
+	L144,59
+	L144,40
+	L151,40
+z"/>
+<path fill="#BCBCB7" opacity="1.000000" stroke="none" 
+	d="
+	M113,40
+	L120,40
+	L120,59
+	L113,59
+z"/>
+<path fill="#BDBDBB" opacity="1.000000" stroke="none" 
+	d="
+	M135,40
+	L128,40
+	L128,59
+	L135,59 
+z"/>
+</svg>

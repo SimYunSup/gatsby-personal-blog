@@ -1,0 +1,125 @@
+---
+import type { StarlightPageProps } from "@astrojs/starlight/props";
+import { getCollection } from "astro:content";
+import starlightConfig from "virtual:starlight/user-config";
+import { Icon } from "astro-icon/components";
+import StarlightPage from "@astrojs/starlight/components/StarlightPage.astro";
+import { LinkButton } from "@astrojs/starlight/components";
+import PostLink from "@components/PostLink.astro";
+import "@styles/pages/index.css";
+
+interface Props {
+  lang?: string;
+}
+
+export function getStaticPaths() {
+  return Object.keys(starlightConfig.locales ?? {}).map((locale) => ({
+    params: {
+      lang: locale,
+    },
+  }));
+}
+
+type Frontmatter = StarlightPageProps['frontmatter'];
+const frontmatter = {
+  title: '메인',
+  template: 'splash',
+  hero: {
+    title: '',
+  },
+} satisfies Frontmatter;
+const posts = await getCollection("docs");
+const recentPosts = posts
+  .sort((a, b) => (b.data.date)!.getTime() - (a.data.date)!.getTime())
+  .slice(0, 3);
+---
+<StarlightPage
+  frontmatter={frontmatter}
+>
+<main class="main-container">
+  {/* Hero Section */}
+  <section class="hero-section">
+    <div class="hero-bg"></div>
+    <div class="hero-container">
+      <div class="hero-content">
+        <div class="hero-text">
+          <div class="highlight">생각 덩어리에 오신 것을 환영합니다.</div>
+          <h1 class="title">안녕하세요! 저는 심윤섭입니다.</h1>
+          <p class="description">
+            JS 생태계를 더 잘 이해하기 위해 인터넷에서 다양한 정보를 모으고 있습니다. 이 공간은 제 생각을 정리하고자 글귀를 모아둔 곳입니다.
+          </p>
+          <div class="button-group">
+            <LinkButton href={`/${Astro.currentLocale}/posts/1`} variant="primary">
+              글 살펴보기
+              <Icon name="lucide:arrow-right" />
+            </LinkButton>
+            <LinkButton
+              class="hero-ghost-button"
+              href="#"
+              variant="secondary"
+            >
+              About.(추가 예정)
+            </LinkButton>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* Featured Posts Section */}
+  <section class="featured-posts-section">
+    <div class="section-header">
+      <div>
+        <h2 class="featured-title">블로그 글</h2>
+      </div>
+      <LinkButton
+        class="view-all-button"
+        href={`/${Astro.currentLocale}/posts/1`}
+        variant="primary"
+      >
+        모두 살펴보기
+        <Icon name="lucide:arrow-right" />
+      </LinkButton>
+    </div>
+    <div class="post-grid">
+      {
+        recentPosts.map((post) => (
+          <PostLink
+            date={post.data.date}
+            title={post.data.title}
+            image={post.data.cover?.src}
+            tag={post.data.tag ?? 'Etc'}
+            to={post.id}
+          />
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="newsletter-section">
+    <div class="newsletter-container">
+      <div class="newsletter-content">
+        <h2 class="newsletter-title">뉴스레터도 살펴보세요.</h2>
+        <p class="newsletter-description">
+          가장 최신 프론트엔드 관련 정보를 정리해서 인사이트를 드리고 있습니다.
+          <br/>
+          <span>(이메일 구독 방식은 아직 구현되지 않았습니다.)</span>
+          &nbsp;&nbsp;
+          <a href="https://ones-to-watch.ethansup.net/">
+            클릭해서 이동하세요.
+          </a>
+        </p>
+        <form class="newsletter-form">
+          <input
+            class="email-input" 
+            disabled 
+            placeholder="your-email@gmail.com" 
+            type="email"
+          />
+          <button class="subscribe-button" disabled>구독하기</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+</StarlightPage>

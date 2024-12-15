@@ -1,0 +1,62 @@
+---
+import type { GetStaticPathsOptions } from 'astro';
+import type { StarlightPageProps } from "@astrojs/starlight/props";
+
+import { getCollection } from 'astro:content';
+import StarlightPage from "@astrojs/starlight/components/StarlightPage.astro";
+
+import "@styles/pages/posts.css";
+import PostLink from '@components/PostLink.astro';
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  const posts = await getCollection("docs");
+  const koreanPosts = posts.filter(({ data }) => data.lang === 'ko');
+
+  return [
+    ...paginate(
+      koreanPosts
+        .sort((a, b) => b.data.date!.getTime() - a.data.date!.getTime()),
+      {
+        pageSize: 6,
+        params: {
+          lang: 'ko',
+        }
+      }
+    ),
+  ];
+}
+
+const { page } = Astro.props;
+
+type Frontmatter = StarlightPageProps['frontmatter'];
+const frontmatter = {
+  title: `글 ${page.currentPage}페이지`,
+  template: 'splash',
+  hero: {
+    title: '',
+  },
+  prev: page.currentPage !== 1 ? {
+    label: "이전 페이지",
+    link: `/${Astro.params.lang}/posts/${page.currentPage - 1}`
+  } : undefined,
+  next: page.currentPage !== page.lastPage ? {
+    label: "다음 페이지",
+    link: `/${Astro.params.lang}/posts/${page.currentPage + 1}`
+  } : undefined,
+} satisfies Frontmatter;
+---
+<StarlightPage
+  frontmatter={frontmatter}
+>
+  <div class="post-grid">
+    {page.data.map((post) => (
+      <PostLink
+        date={post.data.date}
+        title={post.data.title}
+        image={post.data.cover?.src}
+        tag={post.data.tag ?? 'Etc'}
+        to={post.id}
+      />
+    ))}
+  </div>
+</StarlightPage>

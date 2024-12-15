@@ -1,0 +1,249 @@
+/* Hero Section */
+.hero-section {
+  overflow-y: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  width: 98vw;
+  height: 450px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  clip-path: polygon(0% 100%, 50% 100%, 60% 90%, 100% 90%, 100% 0%, 0% 0%);
+  background-color: var(--color-point);
+  @media (min-width: 800px) {
+    width: 95vw;
+    clip-path: polygon(0% 100%, 63% 100%, 70% 85%, 100% 85%, 100% 0%, 0% 0%);
+  }
+}
+.hero-container {
+  position: relative;
+  height: 400px;
+  max-width: 1200px;
+  .sl-markdown-content & {
+    margin: 0;
+  }
+}
+
+.hero-light {
+  position: absolute;
+  right: 0;
+  width: 500px;
+  height: 100%;
+  .sl-markdown-content & {
+    margin: 0;
+  }
+}
+.hero-content {
+  padding: 20px 20px 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  @media (min-width: 800px) {
+    padding-top: 0;
+  }
+}
+
+.hero-text {
+  padding: 20px 0 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  text-align: center;
+  gap: 10px;
+  color: var(--sl-color-white);
+  .sl-markdown-content & {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+}
+
+.highlight {
+  margin: 0 auto;
+  flex: 0 0 auto;
+  display: inline-block;
+  border-radius: 8px;
+  padding: 4px 8px;
+  background: rgba(218, 255, 15, 0.1);
+  color: #daff0f;
+  font-size: .875rem;
+
+  @media (min-width: 800px) {
+    margin: 0;
+    padding: 8px 16px;
+    font-size: 1rem;
+  }
+}
+
+.title {
+  font-weight: bold;
+  width: 100%;
+  text-align: center;
+  .sl-markdown-content & {
+    font-size: 2rem;
+    margin-top: 20px;
+    color: var(--sl-color-black);
+    @media (min-width: 800px) {
+      font-size: 2.5rem;
+    }
+  }
+  @media (min-width: 800px) {
+    text-align: left;
+  }
+}
+
+.description {
+  color: var(--sl-color-black);
+  .sl-markdown-content & {
+    margin-top: 0;
+  }
+}
+
+.button-group {
+  display: flex;
+  width: 100%;
+  gap: 1rem;
+  justify-content: center;
+  .sl-markdown-content & {
+    @media (min-width: 800px) {
+      margin-top: 20px;
+    }
+  }
+  & .sl-link-button {
+    padding: 8px 16px;
+    margin: 0;
+    @media (min-width: 800px) {
+      padding: 15px 20px;
+    }
+  }
+  @media (min-width: 800px) {
+    justify-content: flex-start;
+  }
+}
+
+.hero-ghost-button.secondary {
+  color: var(--sl-color-black);
+  border-color: var(--sl-color-black);
+}
+
+/* Featured Posts Section */
+.featured-posts-section {
+  padding: 100px 0;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+
+  & .sl-link-button {
+    margin: 0;
+  }
+}
+
+body .sl-markdown-content .featured-title {
+  font-size: 1.75rem;
+  font-weight: bold;
+  color: var(--sl-color-gray-1);
+  @media (min-width: 800px) {
+    font-size: 2rem;
+  }
+}
+
+.featured-subtitle {
+  color: var(--sl-color-gray-3);
+}
+
+.post-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Newsletter Section */
+.newsletter-section {
+  position: relative;
+  border-radius: 20px;
+  background-color: var(--color-point);
+  color: var(--sl-color-black);
+  padding: 40px 20px;
+  text-align: center;
+  @media (min-width: 800px) {
+    padding: 80px 20px;
+  }
+}
+
+.newsletter-title {
+  font-weight: bold;
+  body .sl-markdown-content & {
+    color: var(--sl-color-black);
+    font-size: 1.75rem;
+    @media (min-width: 800px) {
+      font-size: 2rem;
+    }
+  }
+}
+
+.newsletter-description {
+  color: var(--sl-color-black);
+  body .sl-markdown-content & {
+    margin-top: 10px;
+    @media (min-width: 800px) {
+      margin-top: 20px;
+    }
+  }
+  & a {
+    color: var(--sl-color-black);
+    &:hover {
+      color: var(--sl-color-gray-5);
+    }
+  }
+}
+
+.newsletter-form {
+  display: flex;
+  gap: 1rem;
+  max-width: 500px;
+  margin: auto;
+}
+
+.email-input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--sl-color-black);
+  padding: 8px;
+  border: none;
+  border-radius: 8px;
+}
+
+.subscribe-button {
+  background: #daff0f;
+  color: #2e3700;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+}
+
+body {
+  --sl-mobile-toc-height: 0;
+  & .content-panel {
+    padding-top: 0;
+  }
+  & .sl-markdown-content {
+    margin-top: 0;
+
+    & div, & section, & p {
+      margin-top: 0;
+    }
+  }
+  & .hero {
+    display: none;
+  }
+
+  & .sl-container footer {
+    display: none;
+  }
+}
