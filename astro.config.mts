@@ -24,7 +24,7 @@ export default defineConfig({
         light: './src/assets/logo/favicon-dark.svg',
         dark: './src/assets/logo/favicon.svg',
       },
-      favicon: './src/assets/logo/favicon.svg',
+      favicon: '/logo/favicon.svg',
       social: {
         github: 'https://github.com/SimYunSup',
         linkedin: 'https://www.linkedin.com/in/pedogunu',
