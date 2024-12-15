@@ -47,7 +47,6 @@ export default [
   {
     name: 'astro/stylistic',
     rules: {
-      'astro/prefer-class-list-directive': 'error',
       'astro/prefer-object-class-list': 'error',
       'astro/prefer-split-class-list': 'error',
       'astro/sort-attributes': 'error',

@@ -13,16 +13,18 @@ export default defineConfig({
   integrations: [
     starlight({
       title: {
-        en: 'Ethan Sup\'s logs',
+        en: 'Think Storage',
         ko: '생각 덩어리'
       },
       description: 'blog to storing my thinking',
       logo: {
-        src: './public/favicon-96x96.png',
+        light: './src/assets/logo/favicon.svg',
+        dark: './src/assets/logo/favicon-dark.svg',
       },
       // favicon: '/public/favicon-',
       social: {
         github: 'https://github.com/SimYunSup',
+        linkedin: 'https://www.linkedin.com/in/pedogunu',
       },
       customCss: [
         './src/styles/custom.css',
