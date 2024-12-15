@@ -19,6 +19,7 @@
   width: 100%;
   overflow: hidden;
   @media (min-width: 800px) {
+    width: unset;
     height: 100%;
   }
 }
