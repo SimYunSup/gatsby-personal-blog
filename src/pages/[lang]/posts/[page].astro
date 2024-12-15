@@ -48,7 +48,7 @@ const frontmatter = {
 <StarlightPage
   frontmatter={frontmatter}
 >
-  <div class="post-grid">
+  <div class="post-grid" data-pagefind-ignore>
     {page.data.map((post) => (
       <PostLink
         date={post.data.date}

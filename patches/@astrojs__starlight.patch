@@ -11,13 +11,26 @@ index 0ab90d1bacb10bb27ed1351f693358f8f90214f5..c8da2952de434caa3c6975525de55ed4
  	data-has-hero={Boolean(Astro.props.entry.data.hero)}
  	data-theme="dark"
  >
+diff --git a/integrations/virtual-user-config.ts b/integrations/virtual-user-config.ts
+index 52f60badd4af05379ce94d9da587b674d4811ea1..027fd822f45aa84b6ec68e222fdd87488eff823b 100644
+--- a/integrations/virtual-user-config.ts
++++ b/integrations/virtual-user-config.ts
+@@ -79,7 +79,7 @@ export function vitePluginStarlightUserConfig(
+ 			: 'export const logos = {};',
+ 		'virtual:starlight/collection-config': `let userCollections;
+ 			try {
+-				userCollections = (await import(${resolveId('./content/config.ts', srcDir)})).collections;
++				userCollections = (await import(${resolveId('./content.config.ts', srcDir)})).collections;
+ 			} catch {}
+ 			export const collections = userCollections;`,
+ 		'virtual:starlight/plugin-translations': `export default ${JSON.stringify(pluginTranslations)}`,
 diff --git a/routes/common.astro b/routes/common.astro
-index eab058a9185e884910f70dbaaae8821547d1a178..cf19c654cacd2b1615b85509f102517c7a809bf5 100644
+index eab058a9185e884910f70dbaaae8821547d1a178..6d31300bfc2d18d574c2b046ea08d4e0cb477e11 100644
 --- a/routes/common.astro
 +++ b/routes/common.astro
 @@ -1,4 +1,6 @@
  ---
-+//@ts-ignore
++//@ts-expect-error
 +import { render } from 'astro:content';
  import { generateRouteData } from '../utils/route-data';
  import type { Route } from '../utils/routing';

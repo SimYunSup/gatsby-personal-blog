@@ -10,6 +10,7 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://ethansup.net',
   integrations: [
     starlight({
       title: {
