@@ -7,7 +7,7 @@ const PAGE_TITLE_ID = '_top';
 const { lang } = Astro.props;
 const { data } = Astro.props.entry;
 const { title = data.title, tagline, image, actions = [] } = data.hero || {};
-const date = new Date(data.date);
+const date = data.date ? new Date(data.date) : undefined;
 const isEdited = date !== undefined
 	&& data.lastUpdated
 	&& date?.getTime() !== (data.lastUpdated as Date)?.getTime();
@@ -35,14 +35,15 @@ if (image) {
 }
 ---
 
-<div class="hero">
+{data.hero?.title !== '' && (
+	<div class="hero">
 	{rawHtml && <div class="hero-html sl-flex" set:html={rawHtml} />}
 	<div class="sl-flex stack">
 		<div class="sl-flex copy">
 			<h1 data-page-title id={PAGE_TITLE_ID} set:html={title} />
 			{tagline && <div class="tagline" set:html={tagline} />}
 			<div>
-				{(new Date(date)).toLocaleDateString(lang, { dateStyle: 'medium', timeZone: 'UTC' })}
+				{date && (new Date(date)).toLocaleDateString(lang, { dateStyle: 'medium', timeZone: 'UTC' })}
 				{(isEdited && data.lastUpdated instanceof Date) && (
 					<span>
 						(수정 {data.lastUpdated.toLocaleDateString(lang, { dateStyle: 'medium', timeZone: 'UTC' })})
@@ -77,6 +78,7 @@ if (image) {
 		}
 	</div>
 </div>
+)}
 
 <style>
 	.hero {
@@ -92,9 +94,12 @@ if (image) {
 	.hero > .hero-html {
 		border-radius: 8px;
 		object-fit: contain;
-		width: min(70%, 500px);
+		width: 100%;
 		height: auto;
 		margin-inline: auto;
+    @media (min-width: 800px) {
+			width: min(70%, 500px);
+		}
 	}
 
 	.stack {

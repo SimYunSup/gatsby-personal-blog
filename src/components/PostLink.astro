@@ -1,0 +1,47 @@
+---
+import { Icon } from "astro-icon/components";
+import styles from '@styles/components/PostLink.module.css';
+
+interface Props {
+  to: string;
+  title: string;
+  date?: Date;
+  tag: string;
+  image?: string;
+}
+const {
+  to,
+  title,
+  date,
+  tag,
+  image
+} = Astro.props;
+---
+
+<div class={styles.outer}>
+  <a class={styles['thumbnail-link']} href={to}>
+    <img class={styles.thumbnail} src={image} alt={title}>
+  </a>
+  <div class={styles.content}>
+    <div class={styles.meta}>
+      <span class={styles.category}>{title}</span>
+    </div>
+    <div class={styles.info}>
+      <h3 class={styles.title}>
+        {title}
+      </h3>
+      {date && (
+        <p class={styles.description}>
+          {date.toLocaleDateString(Astro.currentLocale, { dateStyle: 'medium', timeZone: 'UTC' })}
+        </p>
+      )}
+    </div>
+    <a
+      class={styles.link}
+      href={to}
+    >
+      <span>읽기</span>
+      <Icon name="lucide:arrow-right" />
+    </a>
+  </div>
+</div>

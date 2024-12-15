@@ -1,6 +1,7 @@
 ---
 import { Icon } from 'astro-icon/components';
-import '@styles/components/PackageVersion.css';
+import styles from '@styles/components/PackageVersion.module.css';
+
 const TARGET_DEV = {
   react: {
     icon: 'devicon:react',
@@ -26,20 +27,20 @@ const TARGET_DEV = {
     icon: 'simple-icons:dotnet',
     link: 'https://dotnet.microsoft.com/',
   }
-};
+} as const;
 
-type TargetName = keyof (typeof TARGET_DEV)
+type TargetName = keyof (typeof TARGET_DEV);
 
 interface Props {
-  versions: [TargetName, string][] 
+  versions: [TargetName, string][];
 }
 ---
 
-<div class="badge-wrapper">
+<div class={styles['badge-container']}>
   {Astro.props.versions.map(([name, version]) => (
-    <a class="badge" href={TARGET_DEV[name].link}>
+    <a class={styles.badge} href={TARGET_DEV[name].link}>
       <Icon is:inline name={TARGET_DEV[name].icon} />
-      <span class="version">{version}</span>
+      <span class={styles.version}>{version}</span>
     </a>
   ))}
 </div>

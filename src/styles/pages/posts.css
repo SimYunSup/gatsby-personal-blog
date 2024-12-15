@@ -1,0 +1,22 @@
+.post-grid {
+  padding-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+body {
+  & .content-panel {
+    padding-top: 0;
+  }
+  & .sl-markdown-content {
+    margin-top: 0;
+
+    & div, & section, & p {
+      margin-top: 0;
+    }
+  }
+  & .hero {
+    display: none;
+  }
+}

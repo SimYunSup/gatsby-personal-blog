@@ -9,7 +9,7 @@ export const collections = {
       extend: ({ image }) => {
         return z.object({
           // Add a field that must resolve to a local image.
-          date: z.date().default(new Date()),
+          date: z.date().optional(),
           cover: image().optional(),
           lang: z.string().default('ko'),
         });
