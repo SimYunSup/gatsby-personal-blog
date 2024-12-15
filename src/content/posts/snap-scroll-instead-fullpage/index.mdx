@@ -98,7 +98,7 @@ Scroll container의 viewport에서 snap하는 곳에서 \<length-percentage\>만
 
 먼저 제목에도 적혀있듯이 순수 HTML과 CSS로 진행한 것이 아니라 React 프레임워크에서 진행했다(위에서 봤듯이 Chrome은 애니메이션이 이상하므로 테스트는 Firefox에서 진행했다). 그래서 스크롤할 내용물의 부모가 `body`태그가 아닌 `div`이기 때문에(`body`태그에 바로 렌더링할 수 있지만 [권장하지 않는다고 한다](https://github.com/facebook/create-react-app/issues/1568).) 그래서 처음 한 시도는 snap container를 새로 만들어서 스크롤할 내용물을 넣는 것이였다.
 
-```jsx{10,16}
+```jsx {10,16}
 import React from 'react';
 import './App.css';
 
@@ -120,7 +120,7 @@ function App () {
 }
 ```
 
-```css{15-17,21}
+```css {15-17,21}
 header.header {
   width: 100%;
   height: 100px;
@@ -179,7 +179,7 @@ function App () {
 }
 ```
 
-```css{1-6,13,21}
+```css {1-6,13,21}
     html {
       height: 100vh;
       scroll-snap-type: y mandatory;
@@ -238,7 +238,7 @@ function App () {
 }
 ```
 
-```css{18-19,22-25}
+```css {18-19,22-25}
 header.header {
   width: 100%;
   height: 100px;
