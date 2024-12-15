@@ -1,7 +1,7 @@
 ---
 import type { StarlightPageProps } from "@astrojs/starlight/props";
 
-import { getAbsoluteLocaleUrl, getAbsoluteLocaleUrlList } from "astro:i18n";
+import { getAbsoluteLocaleUrl, getRelativeLocaleUrlList } from "astro:i18n";
 import { getCollection } from "astro:content";
 import { Icon } from "astro-icon/components";
 import StarlightPage from "@astrojs/starlight/components/StarlightPage.astro";
@@ -12,9 +12,13 @@ import "@styles/pages/index.css";
 interface Props {
   lang?: string;
 }
-console.log(getAbsoluteLocaleUrlList())
 export function getStaticPaths() {
-  return getAbsoluteLocaleUrlList().map((locale) => ({
+  console.log(getRelativeLocaleUrlList().map((locale) => ({
+    params: {
+      lang: locale.replaceAll('/', ''),
+    },
+  })))
+  return getRelativeLocaleUrlList().map((locale) => ({
     params: {
       lang: locale.replaceAll('/', ''),
     },
