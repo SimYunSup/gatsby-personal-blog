@@ -36,7 +36,7 @@ interface Props {
 }
 ---
 
-<div class={styles['badge-container']}>
+<div class={styles['badge-wrapper']}>
   {Astro.props.versions.map(([name, version]) => (
     <a class={styles.badge} href={TARGET_DEV[name].link}>
       <Icon is:inline name={TARGET_DEV[name].icon} />

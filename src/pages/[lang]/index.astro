@@ -13,11 +13,6 @@ interface Props {
   lang?: string;
 }
 export function getStaticPaths() {
-  console.log(getRelativeLocaleUrlList().map((locale) => ({
-    params: {
-      lang: locale.replaceAll('/', ''),
-    },
-  })))
   return getRelativeLocaleUrlList().map((locale) => ({
     params: {
       lang: locale.replaceAll('/', ''),
