@@ -59,8 +59,8 @@ export const ChatInterface = () => {
       await new Promise((resolve) => setTimeout(resolve, message.delay));
     }
 
-    // 텍스트 메시지는 스트리밍, 그 외는 바로 표시
-    if (message.role === 'assistant' && !message.response) {
+    // user(답변자) 메시지는 스트리밍, assistant(질문자) 메시지는 즉시 표시
+    if (message.role === 'user') {
       await streamMessage(message, fast);
     } else {
       setVisibleMessages((prev) => [...prev, message]);
@@ -78,19 +78,12 @@ export const ChatInterface = () => {
       clearTimeout(streamingTimeoutRef.current);
     }
 
-    // 현재 스트리밍 중인 메시지 완료
-    if (isStreaming && currentMessageIndex > 0) {
-      const currentMessage = chatScenario[currentMessageIndex - 1];
-      setStreamingText('');
-      setIsStreaming(false);
-      if (!visibleMessages.includes(currentMessage)) {
-        setVisibleMessages((prev) => [...prev, currentMessage]);
-      }
-    }
+    // 스트리밍 상태 초기화
+    setStreamingText('');
+    setIsStreaming(false);
 
-    // 나머지 메시지 빠르게 표시
-    const remainingMessages = chatScenario.slice(currentMessageIndex);
-    setVisibleMessages((prev) => [...prev, ...remainingMessages]);
+    // 모든 메시지를 한 번에 표시 (중복 방지)
+    setVisibleMessages([...chatScenario]);
     setCurrentMessageIndex(chatScenario.length);
     setIsFastForward(false);
   };
@@ -186,6 +179,7 @@ export const ChatInterface = () => {
   const renderMessageContent = (content: string, response?: ChatResponse) => {
     const formattedContent = content
       .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-emerald-600 dark:text-emerald-400">$1</strong>')
+      .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-emerald-600 dark:text-emerald-400 underline hover:text-emerald-700 dark:hover:text-emerald-300 font-medium">$1</a>')
       .replace(/\n/g, '<br />');
 
     return (
