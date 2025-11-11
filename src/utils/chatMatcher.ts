@@ -1,8 +1,9 @@
 import { experiences, sideProjects, koinAchievements, summary, education } from '../data/resume';
 import type { Experience, SideProject, Achievement } from '../data/resume';
+import type { ReactNode } from 'react';
 
 export interface ChatResponse {
-  type: 'text' | 'experience' | 'project' | 'metric' | 'showcase';
+  type: 'text' | 'experience' | 'project' | 'metric' | 'showcase' | 'chain-of-thought';
   content: string;
   data?: {
     experience?: Experience;
@@ -17,6 +18,7 @@ export interface ChatResponse {
         architecture?: string;
       };
     };
+    chainOfThought?: ReactNode;
   };
 }
 

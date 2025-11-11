@@ -3,6 +3,7 @@ import { User, Bot, FastForward } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Card } from '@/components/ui/card';
+import { Message, MessageContent } from '@/components/ai-elements/message';
 import { ExperienceCard } from './ExperienceCard';
 import { SideProjectCard } from './SideProjectCard';
 import { MetricCard } from './MetricCard';
@@ -128,6 +129,12 @@ export const ChatInterface = () => {
     const { type, data } = response;
 
     switch (type) {
+      case 'chain-of-thought':
+        if (data?.chainOfThought) {
+          return <div className="animate-fade-in">{data.chainOfThought}</div>;
+        }
+        break;
+
       case 'experience':
         if (data?.experience) {
           return (
@@ -178,8 +185,8 @@ export const ChatInterface = () => {
 
   const renderMessageContent = (content: string, response?: ChatResponse) => {
     const formattedContent = content
-      .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-emerald-600 dark:text-emerald-400">$1</strong>')
-      .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-emerald-600 dark:text-emerald-400 underline hover:text-emerald-700 dark:hover:text-emerald-300 font-medium">$1</a>')
+      .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold" style="color: var(--color-primary)">$1</strong>')
+      .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="underline hover:opacity-80 font-medium" style="color: var(--color-primary)">$1</a>')
       .replace(/\n/g, '<br />');
 
     return (
@@ -214,20 +221,15 @@ export const ChatInterface = () => {
         <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
           <div className="space-y-4 pb-4">
             {visibleMessages.map((message, index) => (
-              <div
-                key={message.id}
-                className={cn(
-                  'flex gap-3 animate-slide-in',
-                  message.role === 'user' && 'flex-row-reverse'
-                )}
-              >
+              <Message key={message.id} from={message.role}>
                 <div
                   className={cn(
                     'w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0',
                     message.role === 'user'
-                      ? 'bg-emerald-500 text-white'
+                      ? 'text-white'
                       : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300'
                   )}
+                  style={message.role === 'user' ? { backgroundColor: 'var(--color-primary)' } : undefined}
                 >
                   {message.role === 'user' ? (
                     <User className="w-5 h-5" />
@@ -235,31 +237,26 @@ export const ChatInterface = () => {
                     <Bot className="w-5 h-5" />
                   )}
                 </div>
-
-                <div
-                  className={cn(
-                    'flex-1 max-w-[85%] rounded-lg p-4',
-                    message.role === 'user'
-                      ? 'bg-emerald-500 text-white'
-                      : 'bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700'
-                  )}
-                >
+                <MessageContent>
                   {renderMessageContent(message.content, message.response)}
-                </div>
-              </div>
+                </MessageContent>
+              </Message>
             ))}
 
             {/* 스트리밍 중인 메시지 */}
             {isStreaming && streamingText && (
-              <div className="flex gap-3 animate-slide-in">
-                <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300">
-                  <Bot className="w-5 h-5" />
+              <Message from="user">
+                <div
+                  className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 text-white"
+                  style={{ backgroundColor: 'var(--color-primary)' }}
+                >
+                  <User className="w-5 h-5" />
                 </div>
-                <div className="flex-1 max-w-[85%] bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-4">
+                <MessageContent>
                   {renderMessageContent(streamingText)}
-                  <span className="inline-block w-2 h-4 bg-emerald-500 animate-pulse ml-1"></span>
-                </div>
-              </div>
+                  <span className="inline-block w-2 h-4 animate-pulse ml-1" style={{ backgroundColor: 'var(--color-primary)' }}></span>
+                </MessageContent>
+              </Message>
             )}
 
             {/* 스크롤 트리거 */}

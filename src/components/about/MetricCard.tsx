@@ -1,9 +1,10 @@
 import type { Metric } from '../../data/resume';
 import { Group } from '@visx/group';
-import { Bar } from '@visx/shape';
-import { scaleLinear, scaleBand } from '@visx/scale';
+import { LinePath } from '@visx/shape';
+import { scaleLinear, scalePoint } from '@visx/scale';
 import { AxisBottom, AxisLeft } from '@visx/axis';
 import { GridRows } from '@visx/grid';
+import { curveMonotoneX } from '@visx/curve';
 import { useMemo } from 'react';
 
 interface MetricCardProps {
@@ -69,10 +70,10 @@ export const MetricCard = ({ metric, title, animated = true }: MetricCardProps) 
 
   const xScale = useMemo(
     () =>
-      scaleBand<string>({
+      scalePoint<string>({
         range: [0, xMax],
         domain: data.map(d => d.label),
-        padding: 0.4,
+        padding: 0.5,
       }),
     [xMax, data]
   );
@@ -101,29 +102,36 @@ export const MetricCard = ({ metric, title, animated = true }: MetricCardProps) 
             strokeOpacity={0.3}
           />
 
+          <LinePath
+            data={data}
+            x={(d) => xScale(d.label) ?? 0}
+            y={(d) => yScale(d.value) ?? 0}
+            stroke="var(--color-primary)"
+            strokeWidth={3}
+            curve={curveMonotoneX}
+          />
+
           {data.map((d) => {
-            const barWidth = xScale.bandwidth();
-            const barHeight = yMax - (yScale(d.value) ?? 0);
-            const barX = xScale(d.label);
-            const barY = yMax - barHeight;
+            const cx = xScale(d.label) ?? 0;
+            const cy = yScale(d.value) ?? 0;
 
             return (
-              <Group key={`bar-${d.label}`}>
-                <Bar
-                  x={barX}
-                  y={barY}
-                  width={barWidth}
-                  height={barHeight}
-                  fill={d.label === 'Before' ? '#94a3b8' : '#10b981'}
-                  rx={4}
+              <Group key={`point-${d.label}`}>
+                <circle
+                  cx={cx}
+                  cy={cy}
+                  r={5}
+                  fill="var(--color-primary)"
+                  stroke="#fff"
+                  strokeWidth={2}
                 />
                 <text
-                  x={(barX ?? 0) + barWidth / 2}
-                  y={barY - 5}
+                  x={cx}
+                  y={cy - 15}
                   textAnchor="middle"
                   fontSize={12}
                   fontWeight="bold"
-                  fill={d.label === 'Before' ? '#64748b' : '#059669'}
+                  fill="var(--color-primary)"
                 >
                   {metric[d.label === 'Before' ? 'before' : 'after']}
                 </text>
