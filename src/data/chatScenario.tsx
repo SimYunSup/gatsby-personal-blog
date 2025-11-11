@@ -39,7 +39,7 @@ export const chatScenario: ChatMessage[] = [
   {
     id: '4',
     role: 'user',
-    content: '가장 최근에는 **엘리스**에서 AIDT 교과서 프로젝트를 진행했습니다.\\n\\n기존 CRA 기반 웹페이지의 빌드 및 릴리즈 속도가 느려 QA 피드백이 어려웠는데, Rsbuild로 전환하고 불필요한 캐싱을 제거하여 **CI/CD 시간을 2분 40초에서 1분으로 60% 단축**했습니다.',
+    content: '가장 최근에는 **엘리스**에서 **AI 디지털 교과서** 개발에 참여했습니다.\\n\\n**엘리스 중등 영어**, **교문사 중등 정보**, **교문사 고등 정보** 교과서 템플릿을 개발하고, 교과서 QA를 위한 devtool MVP를 제작했습니다.\\n\\n기존 CRA 기반 프로젝트의 빌드 속도가 느려 QA 피드백이 어려웠는데, **Rsbuild로 전환**하여 빌드 시간을 1분에서 4초로 단축하고, **CI/CD 전체 시간을 2분 40초에서 1분으로 60% 단축**했습니다.',
     response: {
       type: 'chain-of-thought',
       content: '',
@@ -55,14 +55,20 @@ export const chatScenario: ChatMessage[] = [
                 label="문제 파악"
                 description="CRA 기반 빌드가 느려 QA 피드백 주기가 길어지는 문제 발견"
               >
-                기존 CRA 기반 프로젝트는 빌드 시간이 2분 40초로, 빠른 피드백 루프를 방해했습니다.
+                플랫폼 로딩이 길어져 교과서 내용을 보기까지 시간이 오래 걸렸고, CRA 기반 빌드는 2분 40초가 소요되어 QA 피드백 루프가 느렸습니다. 교과서 개발 특성상 빠른 프리뷰가 중요했습니다.
+              </ChainOfThoughtStep>
+              <ChainOfThoughtStep
+                label="QA를 위한 Devtool MVP 개발"
+                description="스테이징에서 모든 route를 빠르게 방문할 수 있는 편의 기능"
+              >
+                교과서의 모든 페이지를 빠르게 테스트할 수 있도록 devtool을 개발하여, QA 담당자가 효율적으로 검수할 수 있는 환경을 제공했습니다.
               </ChainOfThoughtStep>
               <ChainOfThoughtStep
                 icon={Zap}
-                label="Rsbuild 도입"
-                description="Webpack 대신 Rspack 기반의 Rsbuild로 전환"
+                label="CRA에서 Rsbuild로 전환"
+                description="Webpack 대신 Rspack 기반의 Rsbuild로 마이그레이션"
               >
-                Rspack은 Rust 기반의 빠른 번들러로, Webpack보다 10배 이상 빠른 빌드 속도를 제공합니다.
+                Rspack은 Rust 기반의 빠른 번들러로, 기존 CRA 레포지토리와 플러그인을 Rsbuild로 옮겨 빌드 속도를 1분에서 4초로 대폭 단축했습니다. Webpack보다 10배 이상 빠른 빌드 속도를 달성했습니다.
               </ChainOfThoughtStep>
               <ChainOfThoughtStep
                 icon={Database}
@@ -72,11 +78,17 @@ export const chatScenario: ChatMessage[] = [
                 GitHub Actions에서 node_modules를 캐싱하고 있었으나, pnpm의 효율적인 패키지 관리로 인해 캐싱이 오히려 오버헤드가 되고 있었습니다. 이를 제거하여 추가 시간 절감을 달성했습니다.
               </ChainOfThoughtStep>
               <ChainOfThoughtStep
+                label="Fluid Typography 도입"
+                description="vw, vh로 다양한 디바이스 지원"
+              >
+                Fluid Typography를 활용하여 하나의 디자인으로 다양한 디바이스를 지원할 수 있게 제작하여, 반응형 디자인의 유지보수성을 높였습니다.
+              </ChainOfThoughtStep>
+              <ChainOfThoughtStep
                 label="결과 측정"
-                description="CI/CD 시간을 2분 40초에서 1분으로 60% 단축"
+                description="빌드 시간 1분 → 4초, CI/CD 시간 60% 단축"
                 status="complete"
               >
-                QA 피드백 주기가 빨라져 개발 속도가 향상되었고, 팀 전체의 생산성이 개선되었습니다.
+                빌드 시간이 극적으로 단축되어 QA 피드백 주기가 빨라졌고, 팀 전체의 생산성이 개선되었습니다. AI 디지털 교과서 개발 효율이 크게 향상되었습니다.
               </ChainOfThoughtStep>
             </ChainOfThoughtContent>
           </ChainOfThought>
@@ -94,7 +106,7 @@ export const chatScenario: ChatMessage[] = [
   {
     id: '6',
     role: 'user',
-    content: '네, 데이터 fetching 방식을 개선했습니다.\\n\\n기존 Tanstack Query 사용 시 워터폴이 발생했는데, **React Router + SWR**을 활용하여 유저 데이터 fetching 코드를 한 곳에 모으고 **LCP를 800ms에서 600ms로 25% 개선**했습니다.',
+    content: '네, 데이터 fetching 방식을 개선했습니다.\\n\\n기존 CRA 템플릿이 Tanstack Query 기반이어서 워터폴이 발생했는데, **React Router 기반으로 템플릿을 재구성**하고 **SWR**을 활용하여 유저 데이터 fetching 코드를 한 곳에 모아 **LCP를 800ms에서 600ms로 25% 개선**했습니다.',
     response: {
       type: 'chain-of-thought',
       content: '',
@@ -107,28 +119,28 @@ export const chatScenario: ChatMessage[] = [
             <ChainOfThoughtContent>
               <ChainOfThoughtStep
                 label="문제 파악"
-                description="Tanstack Query 사용 시 데이터 fetching 워터폴 발생"
+                description="CRA 템플릿의 Tanstack Query 사용 시 워터폴 발생"
               >
-                컴포넌트가 마운트되기 전까지 데이터 요청이 시작되지 않아, 연속적인 데이터 fetching이 워터폴을 형성했습니다.
+                기존 CRA 템플릿이 Tanstack Query 기반이어서, 컴포넌트가 마운트되기 전까지 데이터 요청이 시작되지 않았습니다. 연속적인 데이터 fetching이 워터폴을 형성하여 초기 로딩이 느렸습니다.
               </ChainOfThoughtStep>
               <ChainOfThoughtStep
-                label="React Router 활용"
+                label="React Router 기반 템플릿 재구성"
                 description="라우터 레벨에서 데이터 프리페칭"
               >
-                React Router의 loader 기능을 활용하여 페이지 진입 전에 데이터 fetching을 시작했습니다. 이로써 컴포넌트 마운트 시점에 이미 데이터가 준비되어 있습니다.
+                기존 CRA 템플릿을 React Router 기반으로 재구성하여, loader 기능을 활용해 페이지 진입 전에 데이터 fetching을 시작했습니다. 컴포넌트 마운트 시점에 이미 데이터가 준비되어 있어 워터폴을 제거했습니다.
               </ChainOfThoughtStep>
               <ChainOfThoughtStep
                 label="SWR로 캐싱 최적화"
-                description="SWR을 통한 효율적인 데이터 캐싱 및 갱신"
+                description="유저 데이터 fetching 코드를 한 곳에 모아 관리"
               >
-                SWR(Stale-While-Revalidate)로 캐시된 데이터를 먼저 보여주고, 백그라운드에서 데이터를 갱신하여 사용자 경험을 개선했습니다.
+                SWR(Stale-While-Revalidate)로 캐시된 데이터를 먼저 보여주고, 백그라운드에서 데이터를 갱신하여 사용자 경험을 개선했습니다. 분산되어 있던 유저 데이터 fetching 로직을 한 곳에 모아 유지보수성도 향상시켰습니다.
               </ChainOfThoughtStep>
               <ChainOfThoughtStep
                 label="결과 측정"
-                description="LCP를 800ms에서 600ms로 25% 개선"
+                description="로컬 환경에서 LCP를 800ms에서 600ms로 25% 개선"
                 status="complete"
               >
-                사용자가 페이지의 주요 콘텐츠를 더 빠르게 볼 수 있게 되어 체감 성능이 크게 향상되었습니다.
+                사용자가 교과서의 주요 콘텐츠를 더 빠르게 볼 수 있게 되어 체감 성능이 크게 향상되었습니다. 학생들이 교과서를 더 빠르게 접근할 수 있게 되었습니다.
               </ChainOfThoughtStep>
             </ChainOfThoughtContent>
           </ChainOfThought>
@@ -165,7 +177,7 @@ export const chatScenario: ChatMessage[] = [
   {
     id: '10',
     role: 'user',
-    content: '가장 큰 성과는 **Headless CMS 도입으로 개발 기간을 50% 단축**한 것입니다.\\n\\nPayloadCMS를 도입하여 페이지 개발 완료 기간을 1개월에서 2주로 단축했고, 비개발 직군도 콘텐츠를 직접 수정할 수 있게 되었습니다.\\n\\n또한 **Nuxt.js로 전환**하여 SSR을 적용, **LCP를 3초에서 1초로 67% 개선**했습니다.',
+    content: '**Headless CMS 기반 Web CMS 솔루션**을 처음부터 설계하고 개발했습니다.\\n\\nPayloadCMS를 리서치하고 도입하여 기존 랜딩페이지 개발 프로세스의 비효율성을 제거했고, 페이지 개발 기간을 1개월에서 2주로 50% 단축했습니다. 디자이너도 어드민에서 쉽게 사용할 수 있도록 블록 컴포넌트를 개발하여 비개발자도 UI 수정과 삭제가 가능하도록 만들었습니다.\\n\\n또한 클라이언트와 디자이너의 다양한 요구사항에 빠르게 대응하기 위해 Lexical 기반 위지윅 에디터에 테이블 기능과 이미지 크롭 기능을 추가로 개발했습니다. 관리자가 여러 어드민 페이지를 번갈아가며 관리하는 불편함을 해소하기 위해 Multi-tenant 구조를 도입하여 한 곳에서 통합 관리할 수 있게 했습니다.\\n\\n성능 개선을 위해 Nuxt.js를 도입하고 프론트엔드 개발자들에게 교육하여 LCP를 3초에서 1초로 67% 개선했습니다. 로컬 개발 환경의 온보딩을 간소화하기 위해 모노레포를 구성하고 ESLint와 Caddy를 활용한 자동화를 진행했으며, PayloadCMS를 깊이 분석하며 발견한 버그를 수정하고 새로운 기능을 개발하여 14개의 오픈소스 contribution을 기여했습니다.',
     response: {
       type: 'chain-of-thought',
       content: '',
@@ -178,36 +190,56 @@ export const chatScenario: ChatMessage[] = [
             <ChainOfThoughtContent>
               <ChainOfThoughtStep
                 label="문제 파악"
-                description="페이지 개발마다 프론트엔드 개발자의 코드 작성이 필요"
+                description="랜딩페이지 개발마다 프론트엔드 개발자 작업 필요, 비효율적인 프로세스"
               >
-                모든 콘텐츠 변경과 새 페이지 추가에 개발자가 필요했고, 이는 1개월 이상의 시간이 소요되었습니다.
+                모든 콘텐츠 변경과 새 페이지 추가에 개발자가 필요했고, 개발 인원이 부족한 상황에서 1개월 이상이 소요되며 디자이너의 간단한 UI 수정 요청도 개발자를 거쳐야 했습니다.
               </ChainOfThoughtStep>
               <ChainOfThoughtStep
                 icon={Database}
-                label="PayloadCMS 선택"
-                description="TypeScript 기반의 Headless CMS 도입"
+                label="Headless CMS 리서치 및 PayloadCMS 선택"
+                description="TypeScript 기반의 커스터마이징 가능한 CMS 도입"
               >
-                Strapi, Contentful 등 여러 CMS를 비교한 결과, TypeScript 기반의 PayloadCMS가 커스터마이징이 용이하고 개발 경험이 뛰어나다고 판단했습니다. 실제로 PayloadCMS 오픈소스에 14개의 contribution을 기여할 정도로 깊이 있게 학습했습니다.
+                Strapi, Contentful 등 여러 Headless CMS를 비교 분석하고 PoC를 거쳐, TypeScript 기반으로 커스터마이징이 용이한 PayloadCMS를 선택했습니다. 실제 서비스에 적용하며 PayloadCMS를 깊이 분석하여 14개의 오픈소스 contribution을 기여했습니다.
               </ChainOfThoughtStep>
               <ChainOfThoughtStep
-                label="블록 기반 콘텐츠 구조 설계"
-                description="비개발자도 사용 가능한 직관적인 관리 인터페이스 구축"
+                label="블록 컴포넌트 시스템 개발"
+                description="비개발자도 어드민에서 UI 수정 가능하도록 설계"
               >
-                페이지를 블록 단위로 설계하여, 마케팅팀이 드래그 앤 드롭으로 페이지를 구성할 수 있도록 했습니다. 이로써 개발자 개입 없이 콘텐츠 수정이 가능해졌습니다.
+                페이지를 블록 단위로 구조화하여 디자이너와 마케터가 드래그 앤 드롭으로 페이지를 구성할 수 있도록 했습니다. 개발자 개입 없이 UI 수정, 삭제, 추가가 가능해져 CS 처리 속도가 대폭 향상되었습니다.
+              </ChainOfThoughtStep>
+              <ChainOfThoughtStep
+                icon={Rocket}
+                label="Lexical 기반 위지윅 에디터 개발"
+                description="클라이언트 요구에 빠르게 대응할 수 있는 확장 가능한 에디터"
+              >
+                기본 위지윅 에디터 외에도 테이블 기능, 이미지 크롭 기능 등을 추가로 개발하여 클라이언트와 디자이너의 다양한 요구사항에 빠르게 대응할 수 있는 환경을 구축했습니다.
+              </ChainOfThoughtStep>
+              <ChainOfThoughtStep
+                label="Multi-tenant 구조 도입"
+                description="여러 어드민 페이지를 하나에서 통합 관리"
+              >
+                관리자가 여러 어드민을 번갈아가며 관리하는 불편함을 해소하기 위해 백엔드 multi-tenant를 구성하고, 이에 맞는 커스텀 컴포넌트를 개발하여 한 곳에서 여러 페이지를 효율적으로 관리할 수 있게 했습니다.
               </ChainOfThoughtStep>
               <ChainOfThoughtStep
                 icon={Zap}
-                label="Nuxt.js SSR 전환"
-                description="CSR에서 SSR로 전환하여 초기 로딩 성능 대폭 개선"
+                label="Nuxt.js SSR 전환 및 팀 교육"
+                description="Vue 기반 프로젝트에서 waterfall 제거"
               >
-                기존 CSR 방식에서 Nuxt.js를 활용한 SSR로 전환하여, 서버에서 HTML을 미리 렌더링해 전송함으로써 첫 페이지 로드 속도를 크게 개선했습니다.
+                기존 Vue CSR 방식에서 Nuxt.js SSR로 전환하여 데이터 fetching waterfall을 제거하고, 프론트엔드 개발자들에게 Nuxt.js를 교육하여 팀 전체의 기술 스택을 업그레이드했습니다.
               </ChainOfThoughtStep>
               <ChainOfThoughtStep
-                label="성과 검증"
-                description="개발 기간 50% 단축, LCP 67% 개선"
+                icon={TestTube}
+                label="모노레포 구성 및 개발 환경 자동화"
+                description="ESLint, Caddy로 로컬 개발 온보딩 간소화"
+              >
+                다른 프론트엔드 개발자의 컨텍스트 스위칭을 최소화하기 위해 모노레포를 구성하고, ESLint 설정과 Caddy를 활용한 로컬 개발 환경 자동화를 진행했습니다. 간단한 문서화로 새로운 개발자도 빠르게 프로젝트에 기여할 수 있게 되었습니다.
+              </ChainOfThoughtStep>
+              <ChainOfThoughtStep
+                label="성과 검증 및 오픈소스 기여"
+                description="개발 기간 50% 단축, LCP 67% 개선, PayloadCMS 14개 contribution"
                 status="complete"
               >
-                페이지 개발 기간이 1개월에서 2주로 단축되었고, LCP는 3초에서 1초로 67% 개선되어 사용자 경험과 개발 생산성이 모두 향상되었습니다.
+                페이지 개발 기간이 1개월에서 2주로 단축되었고, LCP는 3초에서 1초로 67% 개선되었습니다. PayloadCMS를 분석하며 발견한 버그를 수정하고 새로운 기능을 개발하여 오픈소스 프로젝트에 14개의 contribution을 기여했습니다.
               </ChainOfThoughtStep>
             </ChainOfThoughtContent>
           </ChainOfThought>
@@ -336,7 +368,7 @@ export const chatScenario: ChatMessage[] = [
   {
     id: '16',
     role: 'user',
-    content: '대학교 재학 중 **KOIN** 프로젝트에 참여했습니다.\\n\\n한국기술교육대학교 커뮤니티 서비스로, Vue.js에서 React로 전환하고 테스트 자동화를 도입하여 **신규 팀원의 온보딩 기간을 3일에서 1일로 67% 단축**했습니다.\\n\\nReact + TypeScript 기반으로 재작성하여 INP, LCP, FCP 등 **주요 웹 지표를 20% 개선**했습니다.',
+    content: '대학교 재학 중 **KOIN** 프로젝트에 참여했습니다.\\n\\n**한국기술교육대학교 커뮤니티 서비스**로, 가게 홍보 게시판, 동아리 소개 등 교내 활동 정보를 통합했습니다.\\n\\n**Vue → React**, **JS → TS**로 두 번의 리코드를 진행하고, **Lint 설정, CI 구축, 코드 리뷰 문화 도입**으로 **신규 팀원의 온보딩 기간을 3일에서 1일로 67% 단축**했습니다.\\n\\n**주요 웹 지표를 20% 개선**하며 개발 패러다임을 개선했습니다.',
     response: {
       type: 'chain-of-thought',
       content: '',
@@ -348,38 +380,44 @@ export const chatScenario: ChatMessage[] = [
             </ChainOfThoughtHeader>
             <ChainOfThoughtContent>
               <ChainOfThoughtStep
-                label="문제 파악"
-                description="신규 팀원이 프로젝트를 이해하고 기여하기까지 3일 소요"
+                label="문제 파악 및 학교 생활 기능 개발"
+                description="교내 활동 정보가 페이스북 등에 분산, 찾기 어려운 문제"
               >
-                기존 Vue.js 코드베이스가 문서화되지 않았고, 타입 안정성이 부족하여 신규 팀원이 코드를 이해하는 데 시간이 오래 걸렸습니다.
+                가게 홍보, 동아리 소개 등이 페이스북 등 외부 플랫폼에 분산되어 있었습니다. 이를 KOIN에 통합하여 학생들이 한 곳에서 쉽게 찾을 수 있도록 했습니다. 그러나 오랜 시간 유지보수되지 않아 코드 안정성과 개발 속도가 낮았습니다.
+              </ChainOfThoughtStep>
+              <ChainOfThoughtStep
+                label="첫 번째 리코드: Vue → React"
+                description="React Hooks 등장으로 양방향 바인딩의 복잡성 제거"
+              >
+                React Hooks의 등장으로 Vue의 낮은 러닝커브 장점이 상쇄되었고, 프로젝트 내에서 양방향 바인딩 활용도가 낮아 복잡성만 더한다고 판단했습니다. React로 마이그레이션하여 불필요한 개발 패러다임을 걷어내고 코드를 단순화했습니다.
               </ChainOfThoughtStep>
               <ChainOfThoughtStep
                 icon={TestTube}
-                label="React + TypeScript 전환"
-                description="타입 안정성과 명확한 코드 구조 확립"
+                label="두 번째 리코드: JS → TypeScript"
+                description="코드 안정성과 개발 속도 향상을 위한 타입 시스템 도입"
               >
-                TypeScript를 도입하여 타입 안정성을 확보하고, 컴포넌트 인터페이스를 명확히 정의하여 코드 가독성을 높였습니다.
+                TypeScript를 도입하여 타입 안정성을 확보하고, 컴포넌트 인터페이스를 명확히 정의했습니다. 개발 패러다임 변경으로 코드 복잡도를 낮추고 성능과 개발 경험을 동시에 개선했습니다.
               </ChainOfThoughtStep>
               <ChainOfThoughtStep
                 icon={TestTube}
-                label="테스트 자동화 도입"
-                description="Jest, React Testing Library로 단위 테스트 구축"
+                label="인프라 세팅 및 테스트 자동화"
+                description="Lint, CI, 테스트로 코드 안정성 추구"
               >
-                주요 컴포넌트와 유틸리티 함수에 테스트를 작성하여, 코드 변경 시 안전하게 리팩토링할 수 있는 환경을 만들었습니다. 테스트 코드가 문서 역할도 함께 수행했습니다.
+                Lint 설정 및 적용, 테스트와 Lint를 강제하는 CI를 구축하여 코드 안정성을 추구했습니다. Jest와 React Testing Library로 단위 테스트를 작성하여 안전한 리팩토링 환경을 만들었습니다.
               </ChainOfThoughtStep>
               <ChainOfThoughtStep
                 icon={Users}
-                label="문서화 및 가이드 작성"
-                description="신규 팀원을 위한 온보딩 문서 작성"
+                label="코드 리뷰 문화 도입"
+                description="신규 팀원 온보딩 원활화 및 팀 코드 이해도 향상"
               >
-                프로젝트 구조, 컴포넌트 사용법, 코드 스타일 가이드 등을 문서화하여 신규 팀원이 빠르게 적응할 수 있도록 했습니다.
+                코드 리뷰 문화를 도입하여 신규 팀원들이 빠르게 프로젝트를 이해하고 기여할 수 있도록 했습니다. 문서화와 코드 리뷰를 통해 팀 전체의 코드 이해도를 높였습니다.
               </ChainOfThoughtStep>
               <ChainOfThoughtStep
                 label="성과 측정"
                 description="온보딩 기간 3일 → 1일로 67% 단축, 웹 지표 20% 개선"
                 status="complete"
               >
-                타입 안정성, 테스트, 문서화로 신규 팀원이 빠르게 기여할 수 있게 되었고, React로 전환하며 성능도 함께 개선되었습니다.
+                타입 안정성, 테스트, CI, 코드 리뷰 문화로 신규 팀원이 빠르게 기여할 수 있게 되었고, React + TypeScript로 전환하며 INP, LCP, FCP 등 주요 웹 지표가 20% 개선되었습니다.
               </ChainOfThoughtStep>
             </ChainOfThoughtContent>
           </ChainOfThought>
