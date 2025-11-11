@@ -1,11 +1,11 @@
 ---
-import type { Props } from '@astrojs/starlight/props';
+import type { StarlightRouteData } from '@astrojs/starlight/route-data';
 import { Image } from 'astro:assets';
 import { LinkButton } from '@astrojs/starlight/components';
 
 const PAGE_TITLE_ID = '_top';
-const { lang } = Astro.props;
-const { data } = Astro.props.entry;
+
+const { lang, entry: { data } } = Astro.locals.starlightRoute satisfies StarlightRouteData;
 const { title = data.title, tagline, image, actions = [] } = data.hero || {};
 const date = data.date ? new Date(data.date) : undefined;
 const isEdited = date !== undefined
@@ -25,12 +25,10 @@ let lightImage: ImageMetadata | undefined;
 let rawHtml: string | undefined;
 if (image) {
 	if ('file' in image) {
-		darkImage = image.file;
+		darkImage = image.file as ImageMetadata;
 	} else if ('dark' in image) {
-		darkImage = image.dark;
-		lightImage = image.light;
-	} else {
-		rawHtml = image.html;
+		darkImage = image.dark as ImageMetadata;
+		lightImage = image.light as ImageMetadata;
 	}
 }
 ---

@@ -3,6 +3,8 @@ import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import icon from 'astro-icon';
+import react from '@astrojs/react';
+import tailwindcss from '@tailwindcss/vite';
 
 import { RehypeFigurePlugin } from './src/config/rehype/figure';
 
@@ -12,8 +14,9 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://ethansup.net',
+  site: process.env.NODE_ENV === 'production' ? 'https://ethansup.net' : 'http://localhost:4321',
   integrations: [
+    react(),
     starlight({
       title: {
         en: 'Think Storage',
@@ -25,10 +28,18 @@ export default defineConfig({
         dark: './src/assets/logo/favicon.svg',
       },
       favicon: '/logo/favicon.svg',
-      social: {
-        github: 'https://github.com/SimYunSup',
-        linkedin: 'https://www.linkedin.com/in/pedogunu',
-      },
+      social: [
+        {
+          icon: "seti:github",
+          href: "https://github.com/SimYunSup",
+          label: "GitHub",
+        },
+        {
+          icon: "linkedin",
+          href: "https://www.linkedin.com/in/pedogunu",
+          label: "LinkedIn",
+        }
+      ],
       customCss: [
         './src/styles/custom.css',
         './src/styles/component.css'
@@ -57,10 +68,17 @@ export default defineConfig({
   vite: {
     resolve: {
       alias: {
+        '@': path.resolve(dirname, './src'),
         '@components': path.resolve(dirname, './src/components'),
         '@styles': path.resolve(dirname, './src/styles'),
       }
-    }
+    },
+    plugins: [
+      tailwindcss(),
+    ],
+    ssr: {
+      noExternal: ['streamdown'],
+    },
   },
   markdown: {
     rehypePlugins: [
