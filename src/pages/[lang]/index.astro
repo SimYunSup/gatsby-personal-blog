@@ -55,10 +55,10 @@ const recentPosts = posts
             </LinkButton>
             <LinkButton
               class="hero-ghost-button"
-              href="#"
+              href={getAbsoluteLocaleUrl(Astro.currentLocale ?? '', 'about')} 
               variant="secondary"
             >
-              About.(추가 예정)
+              About
             </LinkButton>
           </div>
         </div>

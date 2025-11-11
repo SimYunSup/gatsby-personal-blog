@@ -1,6 +1,14 @@
 ---
-import { ChatInterface } from '../components/about/ChatInterface';
-import '../styles/app.css';
+import { ChatInterface } from '../../components/about/ChatInterface';
+import '../../styles/app.css';
+
+export function getStaticPaths() {
+  return [
+    {
+      params: { lang: 'ko' },
+    }
+  ]
+}
 ---
 
 <!DOCTYPE html>
