@@ -19,20 +19,35 @@ const frontmatter = {
   hero: {
     title: '',
   },
+  head: [],
 } satisfies Frontmatter;
 ---
 
 <StarlightPage frontmatter={frontmatter}>
-  <main class="min-h-screen flex flex-col" data-pagefind-ignore>
-    <header class="text-center py-12 px-6 text-white" style="background: linear-gradient(to bottom right, var(--color-primary), var(--color-primary));">
+  <div slot="header"></div>
+  <div class="not-content" data-pagefind-ignore style="margin: 0; padding: 0; width: 100%;">
+    <header class="text-center py-12 px-6 text-white" style="background: linear-gradient(135deg, var(--color-primary), var(--color-primary)); margin: 0;">
       <h1 class="text-4xl font-bold mb-4">About Me</h1>
       <p class="text-lg opacity-95">
         사용자 경험과 개발 생산성을 숫자로 증명하는 프론트엔드 개발자
       </p>
     </header>
 
-    <section class="flex-1 p-8 max-w-6xl mx-auto w-full">
+    <section class="p-8 max-w-6xl mx-auto w-full">
       <ChatInterface client:load />
     </section>
-  </main>
+  </div>
 </StarlightPage>
+
+<style>
+  :global(.page) {
+    padding: 0 !important;
+  }
+  :global(.header) {
+    display: none !important;
+  }
+  :global(.sl-container) {
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+</style>

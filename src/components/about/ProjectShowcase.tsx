@@ -1,92 +1,60 @@
 import { useState } from 'react';
+import { Card } from '@/components/ui/card';
 
 interface ProjectShowcaseProps {
   projectName: string;
   description: string;
   screens?: {
-    mobile?: string;
-    desktop?: string;
-    architecture?: string;
-  };
+    type: 'image';
+    src: string;
+  }[];
 }
 
 export const ProjectShowcase = ({ projectName, description, screens }: ProjectShowcaseProps) => {
-  const [activeTab, setActiveTab] = useState<'mobile' | 'desktop' | 'architecture'>(
-    screens?.mobile ? 'mobile' : screens?.desktop ? 'desktop' : 'architecture'
-  );
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  const hasScreens = screens && (screens.mobile || screens.desktop || screens.architecture);
+  const hasScreens = screens && screens.length > 0;
 
   return (
-    <div className="project-showcase">
-      <div className="showcase-header">
-        <h3 className="showcase-title">{projectName}</h3>
-        <p className="showcase-description">{description}</p>
+    <Card className="p-6 space-y-4">
+      <div className="space-y-2">
+        <h3 className="text-xl font-semibold" style={{ color: 'var(--color-primary)' }}>
+          {projectName}
+        </h3>
+        <p className="text-sm text-slate-600 dark:text-slate-400">{description}</p>
       </div>
 
       {hasScreens && (
-        <div className="showcase-content">
-          <div className="showcase-tabs">
-            {screens.mobile && (
-              <button
-                className={`tab-button ${activeTab === 'mobile' ? 'active' : ''}`}
-                onClick={() => setActiveTab('mobile')}
-              >
-                📱 Mobile
-              </button>
-            )}
-            {screens.desktop && (
-              <button
-                className={`tab-button ${activeTab === 'desktop' ? 'active' : ''}`}
-                onClick={() => setActiveTab('desktop')}
-              >
-                💻 Desktop
-              </button>
-            )}
-            {screens.architecture && (
-              <button
-                className={`tab-button ${activeTab === 'architecture' ? 'active' : ''}`}
-                onClick={() => setActiveTab('architecture')}
-              >
-                🏗️ Architecture
-              </button>
-            )}
-          </div>
+        <div className="space-y-4">
+          {screens.length > 1 && (
+            <div className="flex gap-2">
+              {screens.map((_, index) => (
+                <button
+                  key={index}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    activeIndex === index
+                      ? 'text-white'
+                      : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                  }`}
+                  style={activeIndex === index ? { backgroundColor: 'var(--color-primary)' } : undefined}
+                  onClick={() => setActiveIndex(index)}
+                >
+                  스크린 {index + 1}
+                </button>
+              ))}
+            </div>
+          )}
 
-          <div className="showcase-viewer">
-            {activeTab === 'mobile' && screens.mobile && (
-              <div className="screen-container mobile">
-                <div className="mobile-frame">
-                  <div className="screen-placeholder">
-                    <p>Mobile Screen Preview</p>
-                    <p className="screen-path">{screens.mobile}</p>
-                  </div>
-                </div>
-              </div>
-            )}
-            {activeTab === 'desktop' && screens.desktop && (
-              <div className="screen-container desktop">
-                <div className="desktop-frame">
-                  <div className="screen-placeholder">
-                    <p>Desktop Screen Preview</p>
-                    <p className="screen-path">{screens.desktop}</p>
-                  </div>
-                </div>
-              </div>
-            )}
-            {activeTab === 'architecture' && screens.architecture && (
-              <div className="screen-container architecture">
-                <div className="architecture-diagram">
-                  <div className="diagram-placeholder">
-                    <p>Architecture Diagram</p>
-                    <p className="screen-path">{screens.architecture}</p>
-                  </div>
-                </div>
-              </div>
-            )}
+          <div className="rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700">
+            <img
+              src={screens[activeIndex].src}
+              alt={`${projectName} screenshot ${activeIndex + 1}`}
+              className="w-full h-auto"
+              style={{ display: 'block' }}
+            />
           </div>
         </div>
       )}
-    </div>
+    </Card>
   );
 };
