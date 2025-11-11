@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import icon from 'astro-icon';
+import react from '@astrojs/react';
 
 import { RehypeFigurePlugin } from './src/config/rehype/figure';
 
@@ -14,6 +15,7 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
   site: 'https://ethansup.net',
   integrations: [
+    react(),
     starlight({
       title: {
         en: 'Think Storage',
@@ -55,6 +57,9 @@ export default defineConfig({
     }),
   ],
   vite: {
+    css: {
+      postcss: './postcss.config.mjs',
+    },
     resolve: {
       alias: {
         '@components': path.resolve(dirname, './src/components'),

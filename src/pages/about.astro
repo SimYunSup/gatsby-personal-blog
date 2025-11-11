@@ -1,0 +1,28 @@
+---
+import { ChatInterface } from '../components/about/ChatInterface';
+import '../styles/app.css';
+---
+
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About Me - 심윤섭</title>
+    <meta name="description" content="사용자 경험과 개발 생산성을 숫자로 증명하는 프론트엔드 개발자" />
+  </head>
+  <body class="bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100">
+    <main class="min-h-screen flex flex-col">
+      <header class="text-center py-12 px-6 bg-gradient-to-br from-emerald-500 to-emerald-600 text-white">
+        <h1 class="text-4xl font-bold mb-4">About Me</h1>
+        <p class="text-lg opacity-95">
+          사용자 경험과 개발 생산성을 숫자로 증명하는 프론트엔드 개발자
+        </p>
+      </header>
+
+      <section class="flex-1 p-8 max-w-6xl mx-auto w-full">
+        <ChatInterface client:load />
+      </section>
+    </main>
+  </body>
+</html>

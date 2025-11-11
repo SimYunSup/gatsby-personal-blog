@@ -13,11 +13,23 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@ai-sdk/react": "^2.0.92",
+    "@ai-sdk/ui-utils": "^1.2.11",
     "@astrojs/partytown": "^2.1.2",
+    "@astrojs/react": "^4.4.2",
     "@astrojs/starlight": "^0.29.3",
     "@iconify-json/lucide": "^1.2.18",
     "@shoelace-style/shoelace": "^2.19.1",
-    "astro": "^5.0.5",
+    "@visx/axis": "^3.12.0",
+    "@visx/gradient": "^3.12.0",
+    "@visx/grid": "^3.12.0",
+    "@visx/group": "^3.12.0",
+    "@visx/scale": "^3.12.0",
+    "@visx/shape": "^3.12.0",
+    "ai": "^5.0.92",
+    "astro": "^5.15.5",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
     "sharp": "^0.32.5"
   },
   "pnpm": {
@@ -34,12 +46,14 @@
     "@iconify-json/devicon": "^1.2.8",
     "@iconify-json/simple-icons": "^1.2.15",
     "@stylistic/eslint-plugin": "^2.12.1",
+    "@tailwindcss/postcss": "^4.0.0",
     "astro-icon": "^1.1.4",
     "eslint": "^9.17.0",
     "eslint-import-resolver-typescript": "^3.7.0",
     "eslint-plugin-astro": "^1.3.1",
     "eslint-plugin-import-x": "^4.5.0",
     "eslint-plugin-mdx": "^3.1.5",
+    "tailwindcss": "^4.0.0",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.18.0"
   }
