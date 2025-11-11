@@ -25,15 +25,15 @@ const frontmatter = {
 
 <StarlightPage frontmatter={frontmatter}>
   <div slot="header"></div>
-  <div class="not-content" data-pagefind-ignore style="margin: 0; padding: 0; width: 100%;">
-    <header class="text-center py-12 px-6 text-white" style="background: linear-gradient(135deg, var(--color-primary), var(--color-primary)); margin: 0;">
-      <h1 class="text-4xl font-bold mb-4">About Me</h1>
-      <p class="text-lg opacity-95">
+  <div class="not-content about-page" data-pagefind-ignore style="margin: 0; padding: 0; width: 100%;">
+    <header class="about-header">
+      <h1 class="about-title">About Me</h1>
+      <p class="about-subtitle">
         사용자 경험과 개발 생산성을 숫자로 증명하는 프론트엔드 개발자
       </p>
     </header>
 
-    <section class="p-8 max-w-6xl mx-auto w-full">
+    <section class="about-section">
       <ChatInterface client:load />
     </section>
   </div>
@@ -52,5 +52,66 @@ const frontmatter = {
   }
   :global(.main-frame) {
     padding: 0 !important;
+  }
+
+  .about-header {
+    text-align: center;
+    padding: 3rem 1.5rem;
+    color: white;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary));
+    margin: 0;
+  }
+
+  .about-title {
+    font-size: 2.25rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+
+  .about-subtitle {
+    font-size: 1.125rem;
+    opacity: 0.95;
+  }
+
+  .about-section {
+    padding: 2rem 1rem;
+    max-width: 72rem;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  /* 모바일 최적화 */
+  @media (max-width: 640px) {
+    .about-header {
+      padding: 2rem 1rem;
+    }
+
+    .about-title {
+      font-size: 1.75rem;
+    }
+
+    .about-subtitle {
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .about-section {
+      padding: 1rem 0.5rem;
+    }
+  }
+
+  /* 태블릿 */
+  @media (min-width: 641px) and (max-width: 1024px) {
+    .about-header {
+      padding: 2.5rem 1.5rem;
+    }
+
+    .about-title {
+      font-size: 2rem;
+    }
+
+    .about-section {
+      padding: 1.5rem 1rem;
+    }
   }
 </style>

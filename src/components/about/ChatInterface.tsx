@@ -262,12 +262,12 @@ export const ChatInterface = () => {
     <div className="relative">
       {/* 버튼 그룹 */}
       {currentMessageIndex < chatScenario.length && (
-        <div className="fixed bottom-8 right-8 z-50 flex gap-3">
+        <div className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-50 flex flex-col sm:flex-row gap-2 sm:gap-3">
           <Button
             onClick={handleNext}
             disabled={isProcessing || isStreaming}
             size="lg"
-            className="shadow-lg hover:shadow-xl transition-shadow"
+            className="shadow-lg hover:shadow-xl transition-shadow w-full sm:w-auto"
           >
             <ChevronRight className="w-5 h-5 mr-2" />
             다음
@@ -277,7 +277,7 @@ export const ChatInterface = () => {
             disabled={isFastForward || isProcessing || isStreaming}
             size="lg"
             variant="outline"
-            className="shadow-lg hover:shadow-xl transition-shadow"
+            className="shadow-lg hover:shadow-xl transition-shadow w-full sm:w-auto"
           >
             <FastForward className="w-5 h-5 mr-2" />
             빨리 감기
@@ -285,7 +285,7 @@ export const ChatInterface = () => {
         </div>
       )}
 
-      <Card className="flex flex-col min-h-[calc(100vh-200px)] overflow-hidden">
+      <Card className="flex flex-col min-h-[calc(100vh-250px)] md:min-h-[calc(100vh-200px)] overflow-hidden">
         <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
           <div className="space-y-4 pb-4">
             {visibleMessages.map((message, index) => (
