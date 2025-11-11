@@ -1,37 +1,26 @@
 import { useState, useRef, useEffect } from 'react';
-import { Send, User, Bot } from 'lucide-react';
+import { User, Bot, FastForward } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Card } from '@/components/ui/card';
 import { ExperienceCard } from './ExperienceCard';
 import { SideProjectCard } from './SideProjectCard';
 import { MetricCard } from './MetricCard';
 import { ProjectShowcase } from './ProjectShowcase';
-import { matchUserQuery, type ChatResponse } from '@/utils/chatMatcher';
+import type { ChatResponse } from '@/utils/chatMatcher';
 import { cn } from '@/lib/utils';
-
-interface Message {
-  id: string;
-  role: 'user' | 'assistant';
-  content: string;
-  response?: ChatResponse;
-  timestamp: Date;
-}
+import { chatScenario, type ChatMessage } from '@/data/chatScenario';
 
 export const ChatInterface = () => {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '0',
-      role: 'assistant',
-      content: '안녕하세요! 심윤섭입니다. 궁금하신 것이 있으시면 편하게 물어보세요.\n\n예를 들어:\n• CI/CD 개선 경험에 대해 알려주세요\n• LCP 성능 개선은 어떻게 하셨나요?\n• 진행한 프로젝트에 대해 알려주세요',
-      timestamp: new Date(),
-    },
-  ]);
-  const [input, setInput] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
+  const [visibleMessages, setVisibleMessages] = useState<ChatMessage[]>([]);
+  const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
+  const [streamingText, setStreamingText] = useState('');
+  const [isStreaming, setIsStreaming] = useState(false);
+  const [isFastForward, setIsFastForward] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLDivElement>(null);
+  const streamingTimeoutRef = useRef<NodeJS.Timeout>();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -39,44 +28,108 @@ export const ChatInterface = () => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [visibleMessages, streamingText]);
 
-  const handleQuickQuestion = (question: string) => {
-    setInput(question);
+  // 텍스트 스트리밍 애니메이션
+  const streamMessage = async (message: ChatMessage, fast: boolean = false) => {
+    setIsStreaming(true);
+    const text = message.content;
+    const delay = fast ? 10 : 30; // 빨리 감기 시 더 빠르게
+
+    for (let i = 0; i <= text.length; i++) {
+      await new Promise((resolve) => {
+        streamingTimeoutRef.current = setTimeout(resolve, delay);
+      });
+      setStreamingText(text.slice(0, i));
+    }
+
+    setIsStreaming(false);
+    setStreamingText('');
+    setVisibleMessages((prev) => [...prev, message]);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!input.trim() || isTyping) return;
+  // 다음 메시지 표시
+  const showNextMessage = async (fast: boolean = false) => {
+    if (currentMessageIndex >= chatScenario.length) return;
 
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      role: 'user',
-      content: input,
-      timestamp: new Date(),
-    };
+    const message = chatScenario[currentMessageIndex];
 
-    setMessages((prev) => [...prev, userMessage]);
-    setInput('');
-    setIsTyping(true);
+    // delay 적용 (빨리 감기 시 스킵)
+    if (!fast && message.delay) {
+      await new Promise((resolve) => setTimeout(resolve, message.delay));
+    }
 
-    // Simulate typing delay
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    // 텍스트 메시지는 스트리밍, 그 외는 바로 표시
+    if (message.role === 'assistant' && !message.response) {
+      await streamMessage(message, fast);
+    } else {
+      setVisibleMessages((prev) => [...prev, message]);
+    }
 
-    // Get response from chatMatcher
-    const response = matchUserQuery(userMessage.content);
-
-    const assistantMessage: Message = {
-      id: (Date.now() + 1).toString(),
-      role: 'assistant',
-      content: response.content,
-      response: response,
-      timestamp: new Date(),
-    };
-
-    setMessages((prev) => [...prev, assistantMessage]);
-    setIsTyping(false);
+    setCurrentMessageIndex((prev) => prev + 1);
   };
+
+  // 빨리 감기
+  const handleFastForward = () => {
+    setIsFastForward(true);
+
+    // 현재 스트리밍 중이면 중단
+    if (streamingTimeoutRef.current) {
+      clearTimeout(streamingTimeoutRef.current);
+    }
+
+    // 현재 스트리밍 중인 메시지 완료
+    if (isStreaming && currentMessageIndex > 0) {
+      const currentMessage = chatScenario[currentMessageIndex - 1];
+      setStreamingText('');
+      setIsStreaming(false);
+      if (!visibleMessages.includes(currentMessage)) {
+        setVisibleMessages((prev) => [...prev, currentMessage]);
+      }
+    }
+
+    // 나머지 메시지 빠르게 표시
+    const remainingMessages = chatScenario.slice(currentMessageIndex);
+    setVisibleMessages((prev) => [...prev, ...remainingMessages]);
+    setCurrentMessageIndex(chatScenario.length);
+    setIsFastForward(false);
+  };
+
+  // IntersectionObserver로 스크롤 감지
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && currentMessageIndex < chatScenario.length) {
+            showNextMessage(false);
+          }
+        });
+      },
+      {
+        root: null,
+        rootMargin: '0px',
+        threshold: 1.0,
+      }
+    );
+
+    if (triggerRef.current) {
+      observer.observe(triggerRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+      if (streamingTimeoutRef.current) {
+        clearTimeout(streamingTimeoutRef.current);
+      }
+    };
+  }, [currentMessageIndex, isStreaming]);
+
+  // 초기 메시지 표시
+  useEffect(() => {
+    if (currentMessageIndex === 0) {
+      showNextMessage(false);
+    }
+  }, []);
 
   const renderGenerativeUI = (response: ChatResponse) => {
     const { type, data } = response;
@@ -130,8 +183,8 @@ export const ChatInterface = () => {
     return null;
   };
 
-  const renderMessageContent = (message: Message) => {
-    const formattedContent = message.content
+  const renderMessageContent = (content: string, response?: ChatResponse) => {
+    const formattedContent = content
       .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-emerald-600 dark:text-emerald-400">$1</strong>')
       .replace(/\n/g, '<br />');
 
@@ -141,126 +194,94 @@ export const ChatInterface = () => {
           className="prose prose-sm dark:prose-invert max-w-none"
           dangerouslySetInnerHTML={{ __html: formattedContent }}
         />
-        {message.response && renderGenerativeUI(message.response)}
+        {response && renderGenerativeUI(response)}
       </div>
     );
   };
 
   return (
-    <Card className="flex flex-col h-[calc(100vh-200px)] overflow-hidden">
-      <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
-        <div className="space-y-4 pb-4">
-          {messages.map((message) => (
-            <div
-              key={message.id}
-              className={cn(
-                'flex gap-3 animate-slide-in',
-                message.role === 'user' && 'flex-row-reverse'
-              )}
-            >
-              <div
-                className={cn(
-                  'w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0',
-                  message.role === 'user'
-                    ? 'bg-emerald-500 text-white'
-                    : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300'
-                )}
-              >
-                {message.role === 'user' ? (
-                  <User className="w-5 h-5" />
-                ) : (
-                  <Bot className="w-5 h-5" />
-                )}
-              </div>
+    <div className="relative">
+      {/* 빨리 감기 버튼 */}
+      {currentMessageIndex < chatScenario.length && (
+        <div className="fixed bottom-24 right-8 z-50">
+          <Button
+            onClick={handleFastForward}
+            disabled={isFastForward}
+            size="lg"
+            className="shadow-lg hover:shadow-xl transition-shadow"
+          >
+            <FastForward className="w-5 h-5 mr-2" />
+            빨리 감기
+          </Button>
+        </div>
+      )}
 
+      <Card className="flex flex-col min-h-[calc(100vh-200px)] overflow-hidden">
+        <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
+          <div className="space-y-4 pb-4">
+            {visibleMessages.map((message, index) => (
               <div
+                key={message.id}
                 className={cn(
-                  'flex-1 max-w-[80%] rounded-lg p-4',
-                  message.role === 'user'
-                    ? 'bg-emerald-500 text-white'
-                    : 'bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700'
+                  'flex gap-3 animate-slide-in',
+                  message.role === 'user' && 'flex-row-reverse'
                 )}
               >
-                {renderMessageContent(message)}
                 <div
                   className={cn(
-                    'text-xs mt-2 opacity-70',
-                    message.role === 'user' ? 'text-white' : 'text-slate-500'
+                    'w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0',
+                    message.role === 'user'
+                      ? 'bg-emerald-500 text-white'
+                      : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300'
                   )}
                 >
-                  {message.timestamp.toLocaleTimeString('ko-KR', {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}
+                  {message.role === 'user' ? (
+                    <User className="w-5 h-5" />
+                  ) : (
+                    <Bot className="w-5 h-5" />
+                  )}
+                </div>
+
+                <div
+                  className={cn(
+                    'flex-1 max-w-[85%] rounded-lg p-4',
+                    message.role === 'user'
+                      ? 'bg-emerald-500 text-white'
+                      : 'bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700'
+                  )}
+                >
+                  {renderMessageContent(message.content, message.response)}
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
 
-          {isTyping && (
-            <div className="flex gap-3 animate-slide-in">
-              <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300">
-                <Bot className="w-5 h-5" />
-              </div>
-              <div className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-4">
-                <div className="flex gap-1">
-                  <span className="w-2 h-2 rounded-full bg-slate-400 animate-bounce [animation-delay:-0.3s]"></span>
-                  <span className="w-2 h-2 rounded-full bg-slate-400 animate-bounce [animation-delay:-0.15s]"></span>
-                  <span className="w-2 h-2 rounded-full bg-slate-400 animate-bounce"></span>
+            {/* 스트리밍 중인 메시지 */}
+            {isStreaming && streamingText && (
+              <div className="flex gap-3 animate-slide-in">
+                <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300">
+                  <Bot className="w-5 h-5" />
+                </div>
+                <div className="flex-1 max-w-[85%] bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-4">
+                  {renderMessageContent(streamingText)}
+                  <span className="inline-block w-2 h-4 bg-emerald-500 animate-pulse ml-1"></span>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-          <div ref={messagesEndRef} />
-        </div>
-      </ScrollArea>
+            {/* 스크롤 트리거 */}
+            <div ref={triggerRef} className="h-px" />
 
-      <div className="border-t border-slate-200 dark:border-slate-700 p-4 bg-white dark:bg-slate-900">
-        <div className="flex flex-wrap gap-2 mb-3">
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={() => handleQuickQuestion('CI/CD 개선 경험에 대해 알려주세요')}
-            className="text-xs"
-          >
-            CI/CD 개선
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={() => handleQuickQuestion('LCP 성능 개선은 어떻게 하셨나요?')}
-            className="text-xs"
-          >
-            성능 최적화
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={() => handleQuickQuestion('진행한 프로젝트에 대해 알려주세요')}
-            className="text-xs"
-          >
-            프로젝트
-          </Button>
-        </div>
+            {/* 메시지 끝 표시 */}
+            {currentMessageIndex >= chatScenario.length && (
+              <div className="text-center py-8 text-slate-500 dark:text-slate-400">
+                <p className="text-sm">포트폴리오를 끝까지 봐주셔서 감사합니다! 🙏</p>
+              </div>
+            )}
 
-        <form onSubmit={handleSubmit} className="flex gap-2">
-          <Input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="궁금한 것을 물어보세요..."
-            disabled={isTyping}
-            className="flex-1"
-          />
-          <Button type="submit" disabled={isTyping || !input.trim()} size="icon">
-            <Send className="w-4 h-4" />
-          </Button>
-        </form>
-      </div>
-    </Card>
+            <div ref={messagesEndRef} />
+          </div>
+        </ScrollArea>
+      </Card>
+    </div>
   );
 };
