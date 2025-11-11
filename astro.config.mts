@@ -76,6 +76,9 @@ export default defineConfig({
     plugins: [
       tailwindcss(),
     ],
+    ssr: {
+      noExternal: ['streamdown'],
+    },
   },
   markdown: {
     rehypePlugins: [

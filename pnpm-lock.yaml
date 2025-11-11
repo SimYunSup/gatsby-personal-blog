@@ -50,6 +50,9 @@ importers:
       '@visx/axis':
         specifier: ^3.12.0
         version: 3.12.0(react@19.2.0)
+      '@visx/curve':
+        specifier: ^3.12.0
+        version: 3.12.0
       '@visx/gradient':
         specifier: ^3.12.0
         version: 3.12.0(react@19.2.0)
