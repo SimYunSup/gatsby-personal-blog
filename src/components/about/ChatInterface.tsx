@@ -72,8 +72,7 @@ export const ChatInterface = () => {
       await new Promise((resolve) => setTimeout(resolve, message.delay));
     }
 
-    // user(답변자) 메시지는 스트리밍, assistant(질문자) 메시지는 즉시 표시
-    if (message.role === 'user') {
+    if (message.role === 'assistant') {
       await streamMessage(message, fast);
     } else {
       setVisibleMessages((prev) => [...prev, message]);
@@ -290,22 +289,20 @@ export const ChatInterface = () => {
           <div className="space-y-4 pb-4">
             {visibleMessages.map((message, index) => (
               <Message key={message.id} from={message.role}>
-                <div
-                  className={cn(
-                    'w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0',
-                    message.role === 'user'
-                      ? 'text-white ml-auto'
-                      : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300'
-                  )}
-                  style={message.role === 'user' ? { backgroundColor: 'var(--color-primary)' } : undefined}
-                >
-                  {message.role === 'user' ? (
-                    <User className="w-5 h-5" />
-                  ) : (
+                {message.role === 'assistant' ? (
+                  <div
+                    className={cn(
+                      'w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0',
+                      'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300'
+                    )}
+                    style={message.role === 'user' ? { backgroundColor: 'var(--color-primary)' } : undefined}
+                  >
                     <Bot className="w-5 h-5" />
-                  )}
-                </div>
-                <MessageContent>
+                  </div>
+                ) : (
+                  null
+                )}
+                <MessageContent className={message.role === 'user' ? `bg-slate-200` : ''}>
                   {renderMessageContent(message.content, message.id, message.response)}
                 </MessageContent>
               </Message>
@@ -313,12 +310,11 @@ export const ChatInterface = () => {
 
             {/* 스트리밍 중인 메시지 */}
             {isStreaming && streamingMessage && (
-              <Message from="user">
+              <Message from="bot">
                 <div
-                  className="ml-auto w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 text-white"
-                  style={{ backgroundColor: 'var(--color-primary)' }}
+                  className="mr-auto w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 flex items-center justify-center flex-shrink-0 text-white"
                 >
-                  <User className="w-5 h-5" />
+                  <Bot className="w-5 h-5" />
                 </div>
                 <MessageContent>
                   <div className="space-y-2">
